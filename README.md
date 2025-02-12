@@ -1,6 +1,6 @@
 # MeterReader.jl
 
-[![version 0.1.0](https://img.shields.io/badge/version-0.1-blue.svg)](https://shields.io/) [![16 tests](https://img.shields.io/badge/tests-581-teal.svg)](https://shields.io/)
+[![version 0.1.0](https://img.shields.io/badge/version-0.1-blue.svg)](https://shields.io/) [![16 tests](https://img.shields.io/badge/tests-16-teal.svg)](https://shields.io/)
 
 A [Julia](https://julialang.org) library and Pluto notebooks for working with Ancient Greek poetic meter, starting with Dactylic Hexameter.
 
