@@ -2,7 +2,7 @@
 
 [![version 0.3.0](https://img.shields.io/badge/version-0.3-blue.svg)](https://shields.io/) [![120 tests](https://img.shields.io/badge/tests-120-teal.svg)](https://shields.io/)
 
-A [Julia](https://julialang.org) library and Pluto notebooks for working with Ancient Greek Dactylic Hexameter.
+A [Julia](https://julialang.org) library and Pluto notebooks for working with Ancient Greek Dactylic Hexameter, using the [CITE Architecture](https://github.com/cite-architecture) to maintain alignment between analysis and the original text.
 
 **Very much a work-in-progress.**
 
