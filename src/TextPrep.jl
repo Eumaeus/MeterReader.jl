@@ -51,18 +51,62 @@ struct BasicSyllable
 	context::Vector{AlignedChar} # The whole Vector, the context for the synapheia
 end
 
+"Pretty-print BasicSyllable; just join the charstring values of each in .chars"
 function showsyllable(basicsyll::BasicSyllable)
 	sylsstring = map(bsc -> bsc.charstring, basicsyll.chars) |> join
 end
 
-
-function showsyllable(vbs::Vector{BasicSyllable})
+"Pretty-print a Vector of BasicSyllables"
+function showsyllable(vbs::Vector{BasicSyllable}, unicode = true)
 	stringvec::Vector{String} = map(vbs) do bs
 		showsyllable(bs)
 	end
-	join(stringvec, " - ")
+
+	if (unicode)
+		BetaReader.betaToUnicode(join(stringvec, " - "))
+	else
+		join(stringvec, " - ")
+	end
 end
 
+"From an analysis of a BasicSyllable, in its context, capture quantity, possible alternatives, and any rules applied."
+struct AnnotatedSyllable
+	syllable::BasicSyllable
+	quantity::String
+	flags::Vector{String}
+	rules::Vector{String}
+end
+
+"Construct an AnnotatedSyllable without .rules"
+function AnnotatedSyllable(syllable::BasicSyllable, quantity::String, flags::Vector{String})
+	emptyrules::Vector{String} = []
+	AnnotatedSyllable(syllable, quantity, flags, emptyrules)
+end
+
+"Construct an AnnotatedSyllable without .flags or .rules"
+function AnnotatedSyllable(syllable::BasicSyllable, quantity::String)
+	emptyflags::Vector{String} = []
+	emptyrules::Vector{String} = []
+	AnnotatedSyllable(syllable, quantity, emptyflags, emptyrules)
+end
+
+"Pretty-print BasicSyllable; just join the charstring values of each in .chars"
+function showsyllable(annsyll::AnnotatedSyllable)
+	sylsstring = map(bsc -> bsc.charstring, annsyll.syllable.chars) |> join
+end
+
+"Pretty-print a Vector of BasicSyllables"
+function showsyllable(vas::Vector{AnnotatedSyllable}, unicode = true)
+	stringvec::Vector{String} = map(vas) do as
+		showsyllable(as)
+	end
+
+	if (unicode)
+		BetaReader.betaToUnicode(join(stringvec, " - "))
+	else
+		join(stringvec, " - ")
+	end
+end
 
 #= ******************* 
 	Constructors

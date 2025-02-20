@@ -34,6 +34,22 @@ const _VOWELS = [
 	"w"
 ]
 
+const _LONG_VOWELS = [
+	"h",
+	"w"
+]
+
+const _SHORT_VOWELS = [
+	"e",
+	"o"
+]
+
+const _AMBIGUOUS_VOWELS = [
+	"a",
+	"i",
+	"u"
+]
+
 const _CONSONANTS	= [
 	"b",
 	"g",
@@ -77,31 +93,51 @@ const _HIATUS = [
 	"hi"
 ]
 
+# Quantities: long, short, ambiguous
+const _QUANTITIES = Dict(
+	"long" => ("-", ""),
+	"short" => ("v", ""),
+	"ambiguous" => ("?", ""),
+	"error" => ("err", "err")
+)
+
+
+
 # RULES 
-const _RULES  = [
-	"long vowel",
-	"short vowel",
-	"diphthong",
-	"circumflex",
-	"circumflex on diphthong",
-	"hiatus", #diphthong treated as two syllabic vowels
-	"hiatus, diaeresis in edition",
-	"ellision",
-	"closed syllable",
-	"synizesis", # discrete vowels turned into diphthon/long-vowel
-	"correption, values swapped", # e.g. "-ου ε-" -> short-long, see 1.14
-	"correption, both short", # e.g. "-ει ε-" -> short short
-	"long by position", # e.g. final-foot trochee
-	"rho cluster", 
-	"lambda cluster", 
-	"sigma cluster",
-	"alpha treated short",
-	"alpha treated long",
-	"iota treated short",
-	"iota treated long",
-	"upsilon treated short",
-	"upsilon treated long",
-	"sponaic 5th foot",
-	"short scans long for no reason",
-]
+const _FLAGS  =  Dict(
+	"ellision" => 0,
+	"correption" => 0,
+	"hiatus" => 0,
+	"ambiguous_vowel" => 0
+)
+
+# RULES 
+const _RULES  =  Dict(
+	"long_vowel" => 0,
+	"short_vowel" => 0,
+	"closed" => 0,
+	"diphthong" => 0,
+	"circumflex" => 0,
+	"circumflex_on_diphthong" => 0,
+	"hiatus" => 0, #diphthong treated as two syllabic vowels
+	"hiatus_diaeresis" => 0,
+	"hiatus_punctuation" => 0,
+	"ellision" => 0,
+	"closed_syllable" => 0,
+	"synizesis" => 0, # discrete vowels turned into diphthon/long-vowel
+	"correption_swapped" => 0, # e.g. "-ου ε-" -> short-long, see 1.14
+	"correption_2_short" => 0, # e.g. "-ει ε-" -> short short
+	"long_by_position" => 0, # e.g. final-foot trochee
+	"rho_cluster" => 0, 
+	"lambda_cluster" => 0, 
+	"sigma_cluster" => 0,
+	"alpha_short" => 0,
+	"alpha_long" => 0,
+	"iota_short" => 0,
+	"iota_long" => 0,
+	"upsilon_short" => 0,
+	"upsilon_long" => 0,
+	"sponaic_5th" => 0,
+	"short_no_reason" => 0
+)
 

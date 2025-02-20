@@ -578,7 +578,35 @@ x = split("ε᾽","")
 x[2][1]
 
 # ╔═╡ 7f61b3c7-bee7-4ddc-af27-6f34daa1957f
-append([1],[2])
+# RULES 
+const _RULES  =  Dict(
+	"long_vowel" => 0,
+	"short_vowel" => 0,
+	"closed" => 0,
+	"diphthong" => 0,
+	"circumflex" => 0,
+	"circumflex_on_diphthong" => 0,
+	"hiatus" => 0, #diphthong treated as two syllabic vowels
+	"hiatus_diaeresis" => 0,
+	"hiatus_punctuation" => 0,
+	"ellision" => 0,
+	"closed_syllable" => 0,
+	"synizesis" => 0, # discrete vowels turned into diphthon/long-vowel
+	"correption_swapped" => 0, # e.g. "-ου ε-" -> short-long, see 1.14
+	"correption_2_short" => 0, # e.g. "-ει ε-" -> short short
+	"long_by_position" => 0, # e.g. final-foot trochee
+	"rho_cluster" => 0, 
+	"lambda_cluster" => 0, 
+	"sigma_cluster" => 0,
+	"alpha_short" => 0,
+	"alpha_long" => 0,
+	"iota_short" => 0,
+	"iota_long" => 0,
+	"upsilon_short" => 0,
+	"upsilon_long" => 0,
+	"sponaic_5th" => 0,
+	"short_no_reason" => 0
+)
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """

@@ -42,6 +42,24 @@ function synapheia(charvec::Vector{AlignedChar}, diacriticals = true, diaeresis 
 
 end
 
+"Strip a beta-code string of diacriticals"
+function stripdiacriticals(s::String)::String 
+	replace(s, r"[()/\\=|?]" => "")
+end
+
+"Strip a the .charstring property of an AlignedChar of diacriticals"
+function stripdiacriticals(ac::AlignedChar)::String 
+	replace(ac.charstring, r"[()/\\=|?]" => "")
+end
+
+"Given a Vector{AlignedChar} return the .charstrings stripped of diacriticals"
+function stripdiacriticals(vac::Vector{AlignedChar})::String 
+	vs::String = map(vac) do ac
+		ac.charstring
+	end |> join
+	replace(vs, r"[()/\\=|?]" => "")
+end
+
 "Given a Vector{AlignedChar}, return a String of just the characters."
 function showChars(charvec::Vector{AlignedChar})::String
 		justchars = map(charvec) do cv 
@@ -116,6 +134,44 @@ function isavowel(vac::Vector{AlignedChar})::Bool
 	end
 	length(fs) == 1
 end
+
+
+"Is a beta-code string-representation of a character a long-vowel, short-vowel, ambiguous-vowel, or none?"
+function vowelquantity(s::String)::String
+	basestring = filter(stripdiacriticals(s)) do sd
+		string(sd) in _VOWELS # remember when you filter a string, you are working with characters!
+	end
+	if (isavowel(s) == false) 
+		"error"
+	else
+		if (basestring in _LONG_VOWELS) "long"	
+		elseif (basestring in _SHORT_VOWELS) "short"
+		elseif (basestring in _AMBIGUOUS_VOWELS)
+			# If there is only one vowel (not a diphthong), and our edition has a circumflex, it must be long	
+			if (contains(s, "=")) "long"
+			else "ambiguous"
+			end
+
+		else "error"
+		end
+	end
+end
+
+"Is a an AlignedChar a long-vowel, short-vowel, ambiguous-vowel, or none?"
+function vowelquantity(ac::AlignedChar)::String
+	s::String = ac.charstring
+	vowelquantity(s)
+end
+
+"Is a Vector{AlignedChar} a long-vowel, short-vowel, ambiguous-vowel, or none?"
+function vowelquantity(vac::Vector{AlignedChar})::String
+	s::String = map(vac) do ac
+		ac.charstring
+	end |> join
+	vowelquantity(s)
+end
+
+
 
 "Is a beta-code string-representation of a character a consonent?"
 function isaconsonant(s::String)::Bool

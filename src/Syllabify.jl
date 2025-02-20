@@ -128,3 +128,16 @@ end
 function makesyll(vac::Vector{AlignedChar}, snf::Synapheia )
 	BasicSyllable(vac, snf.synapheia, snf.context)
 end
+
+"Given a Vector{BasicSyllable} and an index, evaluate the syllable and return an AnnotatedSyllable"
+function evaluate(vbs::Vector{BasicSyllable}, index::Int) # ::AnnotatedSyllable
+	# BasicSyllable -> .chars::Vector{AnnotatedChar}
+	thissyll::BasicSyllable = vbs[index] 
+	thesechars::Vector{AnnotatedSyllable} = thissyll.chars
+
+	quantity::String = begin
+
+	end
+
+	nothing
+end

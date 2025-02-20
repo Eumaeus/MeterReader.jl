@@ -34,7 +34,7 @@ urn:cts:greekLit:tlg0012.tlg001.perseus_grc2:1.4#ἡρώων, αὐτοὺς δ�
 		synf = MeterReader.synapheia(iliadPoeticLines[1].chars)
 		sylls = MeterReader.syllabify4poetry(synf)	
 		println("Returned $(sylls |> length) syllables.")
-		println(MeterReader.showsyllable(sylls))
+		println(MeterReader.showsyllable(sylls, true))
 		typeof(sylls) == Vector{MeterReader.BasicSyllable}
 	end
 
@@ -42,7 +42,7 @@ urn:cts:greekLit:tlg0012.tlg001.perseus_grc2:1.4#ἡρώων, αὐτοὺς δ�
 		synf = MeterReader.synapheia(iliadPoeticLines[2].chars)
 		sylls = MeterReader.syllabify4poetry(synf)	
 		println("Returned $(sylls |> length) syllables.")
-		println(MeterReader.showsyllable(sylls))
+		println(MeterReader.showsyllable(sylls, true))
 		typeof(sylls) == Vector{MeterReader.BasicSyllable}
 	end
 
@@ -50,7 +50,7 @@ urn:cts:greekLit:tlg0012.tlg001.perseus_grc2:1.4#ἡρώων, αὐτοὺς δ�
 		synf = MeterReader.synapheia(iliadPoeticLines[3].chars)
 		sylls = MeterReader.syllabify4poetry(synf)	
 		println("Returned $(sylls |> length) syllables.")
-		println(MeterReader.showsyllable(sylls))
+		println(MeterReader.showsyllable(sylls, true))
 		typeof(sylls) == Vector{MeterReader.BasicSyllable}
 	end
 
@@ -58,7 +58,7 @@ urn:cts:greekLit:tlg0012.tlg001.perseus_grc2:1.4#ἡρώων, αὐτοὺς δ�
 		synf = MeterReader.synapheia(iliadPoeticLines[4].chars)
 		sylls = MeterReader.syllabify4poetry(synf)	
 		println("Returned $(sylls |> length) syllables.")
-		println(MeterReader.showsyllable(sylls))
+		println(MeterReader.showsyllable(sylls, true))
 		typeof(sylls) == Vector{MeterReader.BasicSyllable}
 	end
 

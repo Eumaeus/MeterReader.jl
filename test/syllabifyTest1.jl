@@ -122,6 +122,32 @@ end
 		MeterReader.showChars(cft) == "Mh=nina)/eide"
 	end
 
+	# Test stripdiacriticals()
+	@test begin
+		s = "a)/"
+		MeterReader.stripdiacriticals(s) == "a"
+	end
+
+	@test begin
+		s = "a)/"
+		MeterReader.stripdiacriticals(s) == "a"
+	end
+
+	@test begin
+		s = "w=|"
+		MeterReader.stripdiacriticals(s) == "w"
+	end
+
+	@test begin
+		as = iliadPoeticLines[1].chars[2]
+		MeterReader.stripdiacriticals(as) == "h"
+	end
+
+	@test begin
+		as = iliadPoeticLines[1].chars[7:9]
+		MeterReader.stripdiacriticals(as) == "aei"
+	end
+
 	# Test getting types of characters
 
 	@test begin
@@ -499,7 +525,99 @@ end
 		MeterReader.getchartype(ac) == "vowel"
 	end
 
+	# Test vowel quantity
+	@test begin
+		s = "e"
+		MeterReader.vowelquantity(s) == "short"
+	end
 
+	@test begin
+		s = "e)\\"
+		MeterReader.vowelquantity(s) == "short"
+	end
+
+	@test begin
+		s = "h"
+		MeterReader.vowelquantity(s) == "long"
+	end
+
+	@test begin
+		s = "h(="
+		MeterReader.vowelquantity(s) == "long"
+	end
+
+	@test begin
+		s = "a"
+		MeterReader.vowelquantity(s) == "ambiguous"
+	end
+
+	@test begin
+		s = "a)="
+		MeterReader.vowelquantity(s) == "long"
+	end
+
+	@test begin
+		s = "i"
+		MeterReader.vowelquantity(s) == "ambiguous"
+	end
+
+	@test begin
+		s = "u="
+		MeterReader.vowelquantity(s) == "long"
+	end
+
+	@test begin
+		s = "x"
+		MeterReader.vowelquantity(s) == "error"
+	end
+
+	@test begin
+		l = iliadPoeticLines[3]
+		ac = l.chars[2] # "o"
+		MeterReader.vowelquantity(ac) == "short"
+	end
+
+	@test begin
+		l = iliadPoeticLines[4]
+		ac = l.chars[3] # "ώ"
+		MeterReader.vowelquantity(ac) == "long"
+	end
+
+	@test begin
+		l = iliadPoeticLines[1]
+		ac = l.chars[4] # "ι"
+		MeterReader.vowelquantity(ac) == "ambiguous"
+	end
+
+	@test begin
+		l = iliadPoeticLines[1]
+		ac::MeterReader.AlignedChar = l.chars[25] # "ῖ" (cheating, since that is a diphthong, but we're just testing one character)
+		MeterReader.vowelquantity(ac) == "long"
+	end
+
+	@test begin
+		l = iliadPoeticLines[1]
+		vac::Vector{MeterReader.AlignedChar} = l.chars[1:2] # "Μῆ" 
+		MeterReader.vowelquantity(vac) == "long"
+	end
+
+	@test begin
+		l = iliadPoeticLines[1]
+		vac::Vector{MeterReader.AlignedChar} = l.chars[3:4] # "νι" 
+		MeterReader.vowelquantity(vac) == "ambiguous"
+	end
+
+	@test begin
+		l = iliadPoeticLines[3]
+		vac::Vector{MeterReader.AlignedChar} = l.chars[1:3] # "πολ" 
+		MeterReader.vowelquantity(vac) == "short"
+	end
+
+	@test begin
+		l = iliadPoeticLines[2]
+		vac::Vector{MeterReader.AlignedChar} = l.chars[1:3] # "οὐλ" 
+		MeterReader.vowelquantity(vac) == "error"
+	end
 
 end 
 
