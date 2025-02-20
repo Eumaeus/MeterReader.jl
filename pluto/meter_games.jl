@@ -7,6 +7,7 @@ using InteractiveUtils
 # ╔═╡ 6466482e-2710-40be-a9e1-a67d76b62d86
 begin
 	using Random
+	using Unicode
 	using Base.Iterators: product
 	using BetaReader
 	using CitableText
@@ -74,6 +75,7 @@ md"""
 """
 
 # ╔═╡ 442460a4-1ea6-43bb-ac7c-674d7294d383
+"Given a token, categorize it as 'text', 'separator', or 'punctuation'."
 function typeToken(s::String)::String 
 	puncs = """()[]{}·⸁.,;"?·!–—⸂⸃"""
 	seps = """ \n\t"""
@@ -150,6 +152,11 @@ end
 # ╔═╡ ea6dbe5b-d968-42d3-a683-2e288f29a754
 
 
+# ╔═╡ d5b86821-4d9d-4b03-a41a-c1db3c3c6f68
+md"""
+## Metrical Functions
+"""
+
 # ╔═╡ d0015e2a-d5f8-4785-969a-fc87dfde33e3
 function is_valid_hexameter(line::HexameterLine)::Bool
     if length(line.feet) != 6
@@ -171,10 +178,22 @@ function is_valid_hexameter(line::HexameterLine)::Bool
     return true
 end
 
-# ╔═╡ d5b86821-4d9d-4b03-a41a-c1db3c3c6f68
-md"""
-## Metrical Functions
-"""
+# ╔═╡ c56f7313-4197-4101-b67f-d99b6d70a649
+function meter_string(line::HexameterLine)
+    return join([meter_string(foot) for foot in line.feet])
+end
+
+# ╔═╡ 07cb55ab-20a0-4d74-9c5d-eb7f6866cbce
+function meter_string(foot::Foot)
+    return foot.meter
+end
+
+# ╔═╡ 29442d1a-752e-4412-8aa6-5d74e72a663e
+line = HexameterLine([DACTYL, DACTYL, DACTYL, DACTYL, DACTYL, SPONDEE])
+
+# ╔═╡ 839eea8f-d037-410d-b66f-f62f9bffeb04
+# Generate all combinations
+combinations = collect(product([DACTYL, SPONDEE], [DACTYL, SPONDEE], [DACTYL, SPONDEE], [DACTYL, SPONDEE], [DACTYL, SPONDEE], [SPONDEE, TROCHEE]))
 
 # ╔═╡ c36f8ac0-4c43-495f-817a-192cfa5f054f
 md"""
@@ -188,23 +207,6 @@ function eachwithindex(v::Vector)::Vector{Tuple{Int64, Any}}
         (i, v[i])
     end
 end
-
-# ╔═╡ 07cb55ab-20a0-4d74-9c5d-eb7f6866cbce
-function meter_string(foot::Foot)
-    return foot.meter
-end
-
-# ╔═╡ c56f7313-4197-4101-b67f-d99b6d70a649
-function meter_string(line::HexameterLine)
-    return join([meter_string(foot) for foot in line.feet])
-end
-
-# ╔═╡ 29442d1a-752e-4412-8aa6-5d74e72a663e
-line = HexameterLine([DACTYL, DACTYL, DACTYL, DACTYL, DACTYL, SPONDEE])
-
-# ╔═╡ 839eea8f-d037-410d-b66f-f62f9bffeb04
-# Generate all combinations
-combinations = collect(product([DACTYL, SPONDEE], [DACTYL, SPONDEE], [DACTYL, SPONDEE], [DACTYL, SPONDEE], [DACTYL, SPONDEE], [SPONDEE, TROCHEE]))
 
 # ╔═╡ cc28d8b5-bcaf-445a-bc9d-637e1fc7c410
 # Convert to HexameterLine
@@ -273,6 +275,7 @@ function split_and_retain(my_text::String, split_characters::String = """\n\t()[
 end
 
 # ╔═╡ a9453df4-ebe9-497b-857d-8f9fb72646ea
+"""Given a URN and a string, create a PoeticLine structure (see definition above). """
 function makePoeticLine(urn::CtsUrn, text::String)
 	tokenized = split_and_retain(text)
 	wtoks::Vector{IndexedString} = begin
@@ -295,13 +298,287 @@ pl = makePoeticLine(u2, s2)
 iliadString = """
 Μῆνιν ἄειδε θεὰ Πηληϊάδεω Ἀχιλῆος
 οὐλομένην, ἣ μυρί᾽ Ἀχαιοῖς ἄλγε᾽ ἔθηκε,
-πολλὰς δ᾽ ἰφθίμους ψυχὰς Ἄϊδι προΐαψεν
+πολλὰς δ᾽ ἰφθίμους πσυχὰς Ἄϊδι προΐαπσεν
 ἡρώων, αὐτοὺς δὲ ἑλώρια τεῦχε κύνεσσιν
 οἰωνοῖσί τε πᾶσι, Διὸς δ᾽ ἐτελείετο βουλή,
 """
 
+# ╔═╡ 5413e075-5a9b-476d-a1ae-7cde1235baed
+iliadLines = split(iliadString, "\n")
+
+# ╔═╡ 0e21304f-bf0d-497e-8b73-2d931e748abb
+
+
+# ╔═╡ 0af04859-b342-4d3c-b7cf-1891e8e68c27
+
+
 # ╔═╡ 9d3bcf80-9601-4fa7-9601-4c3160af97ca
 split_and_retain(iliadString, const_splitters)
+
+# ╔═╡ 62f50f61-d483-460a-b12d-c30ad3d4d0be
+md"""
+## Syllabify Workshop
+"""
+
+# ╔═╡ b77b41de-0b7d-45be-b4a1-07eefc40beca
+whichline = 3
+
+# ╔═╡ cbe410ff-7bcc-4043-81ff-1198babd45c8
+ilchars = begin
+	allchars = split(iliadLines[whichline], "")
+	betachars = map( split(iliadLines[whichline], "") ) do c
+		BetaReader.unicodeToBeta(c) |> lowercase
+	end
+	justchars = filter(betachars) do c
+	 	( contains(" ,.';:-–—", c) == false ) &&
+		( c != " )")
+	end
+	justchars
+end
+
+# ╔═╡ feefac3f-f62e-4783-8264-86b54a08ba3b
+begin
+	const _VOWELS = [
+	"a",
+	"e",
+	"h",
+	"i",
+	"o",
+	"u",
+	"w"
+]
+
+const _CONSONANTS	= [
+	"b",
+	"g",
+	"d",
+	"z",
+	"q",
+	"k",
+	"l",
+	"m",
+	"n",
+	"c",
+	"p",
+	"r",
+	"s",
+	"t",
+	"f",
+	"x",
+	"y",
+	"v" # digamma
+]
+
+const _DIPHTHONGS	= [
+	"ai",
+	"au",
+	"ei",
+	"eu",
+	"hi",
+	"hu",
+	"oi",
+	"ou",
+	"ui",
+	"wi"
+]
+
+end
+
+# ╔═╡ 43ed1d11-f987-4cf1-b575-8e0c49a068d4
+function isvowel(s::String)::Bool
+	ts = replace(s, r"[()/\\=|?+]" => "")
+	ts in _VOWELS
+end
+
+# ╔═╡ b9bd7f24-cf50-437e-bbc8-911f5a578fe5
+
+
+# ╔═╡ 36d2f75f-ba4a-46d6-a3f5-0aa9d041e13a
+function containsvowel(s::String)::Bool
+	fs = filter(s) do c 
+		c in _VOWELS
+	end
+	length(fs) > 0
+end
+
+# ╔═╡ bd45d99d-2194-488e-98d1-56ee5cd6f180
+function isconsonant(s::String)::Bool
+	ts = replace(s, r"[()/\\=|?+]" => "")
+	ts in _CONSONANTS
+end
+
+# ╔═╡ 162347d7-5779-4eae-8228-060f26857aae
+contains("a", r"[/\\=]")
+
+# ╔═╡ 2cc3cc8d-86d4-4fda-9b2e-cf60d3e9c97e
+function getchartype(s::String)
+	if isvowel(s) "vowel"
+	elseif isconsonant(s) "consonant"
+	else "other"
+	end
+end
+
+# ╔═╡ d4b6ef06-3af2-48b2-ad0f-2d56c26e8a16
+function stripdiacritics(s::String)::String
+	ts = replace(s, r"[()/\\=|?+]" => "")	
+end 
+
+# ╔═╡ a7cceb2a-7986-4f8e-915c-4b10d1a22dd3
+function isdiphthong(v1::String, v2::String)::Bool
+	if (contains(v2, "+"))
+		false
+	elseif (contains(v1, r"[/\\=]")) # accents on first indicate no diphthong
+		false
+	else
+		ts = ( last(stripdiacritics(v1)) ) * (  last(stripdiacritics(v2))  )
+		ts in _DIPHTHONGS
+	end
+end
+
+# ╔═╡ 2c06cbcc-3bce-4d7d-bac6-963414fc8a74
+
+
+# ╔═╡ 1fa553e1-b23f-4baf-9bf1-97686b944ce5
+"Syllabify a line. Assumes separators and punctuation are removed. Accepts an array of strings, each element being a beta-code representation of a characters and any diacriticals."
+function testsyll(chars::Vector{String})
+	mysylls = []
+	prevchartype = ""
+	for c in eachindex(chars)
+
+		lastchar = begin
+			if (c > 1) chars[c-1]
+			else ""
+			end
+		end
+		next1char = begin
+			if (c+1 > length(chars)) ""
+			else chars[c+1]
+			end
+		end
+		next2char = begin
+			if (c+2 > length(chars)) ""
+			else chars[c+2]
+			end
+		end
+
+		
+
+		if isempty(mysylls) # first char of the line
+			push!(mysylls, chars[c]) # start a new syllable
+			prevchartype = getchartype(chars[c]) # go ahead and update this!
+		else # syllabification is under way
+			if (isconsonant(chars[c])) #consonant?
+
+				# end of line; close the previous syllable
+				if (c == length(chars)) 
+					println("1. $prevchartype -- $(chars[c]) -- $next1char ($(getchartype(next1char))) ")
+					tempstr = last(mysylls)
+					newstr = tempstr * chars[c]
+					pop!(mysylls)
+					push!(mysylls, newstr)
+					prevchartype = getchartype(chars[c])
+				# double-consonant; close the previous syllable
+				elseif ( (prevchartype == "vowel") && ( isconsonant(next1char) )) 
+					println("2. $prevchartype -- $(chars[c]) -- $next1char ($(getchartype(next1char))) ")
+					tempstr = last(mysylls)
+					newstr = tempstr * chars[c]
+					pop!(mysylls)
+					push!(mysylls, newstr)
+					prevchartype = getchartype(chars[c])
+				# one consonant before a vowel; start a new syllable
+				elseif ( (prevchartype == "vowel") && ( isvowel(next1char) ) )  
+					println("3. $prevchartype -- $(chars[c]) -- $next1char ($(getchartype(next1char))) ")
+					push!(mysylls, chars[c]) # start a new syllable
+					prevchartype = getchartype(chars[c]) # go ahead and update this!
+				# 3rd in a consonant cluster; add to last
+				elseif  ( (prevchartype == "consonant") && ( length(last(mysylls)) == 1 ) ) # add to last
+					println("4. $prevchartype -- $(chars[c]) -- $next1char ($(getchartype(next1char))) ")
+					tempstr = last(mysylls)
+					newstr = tempstr * chars[c]
+					pop!(mysylls)
+					push!(mysylls, newstr)
+					prevchartype = getchartype(chars[c])
+				# consonant after closed syllable; start new syllable 
+				elseif  ( (prevchartype == "consonant") && ( isvowel(next1char) ) ) 
+					println("5. $prevchartype -- $(chars[c]) -- $next1char ($(getchartype(next1char))) ")
+					push!(mysylls, chars[c]) # start a new syllable
+					prevchartype = getchartype(chars[c]) # go ahead and update this!
+				# 2nd consonant in cluster of 3+; start a new syllable; anything else
+				else 
+					println("6. $prevchartype -- $(chars[c]) -- $next1char ($(getchartype(next1char))) ")
+					push!(mysylls, chars[c]) # start a new syllable
+					prevchartype = getchartype(chars[c]) # go ahead and update this!
+				
+				end
+				
+			else # got a vowel!
+				if ( prevchartype == "vowel" ) # gotta check for a diphthong
+					if (isdiphthong(last(mysylls), chars[c])) # diphthong, add to previous syllable
+						tempstr = last(mysylls)
+						newstr = tempstr * chars[c]
+						pop!(mysylls)
+						push!(mysylls, newstr)
+						prevchartype = getchartype(chars[c])
+					else # not diphthong; new syllable
+						push!(mysylls, chars[c]) # start a new syllable
+						prevchartype = getchartype(chars[c]) # go ahead and update this!			
+					end
+
+				else # Not dealing with a diphthong
+					if (containsvowel(last(mysylls))) 
+						push!(mysylls, chars[c]) # start a new syllable
+						prevchartype = getchartype(chars[c]) # go ahead and update this!
+					else # add to previous
+						tempstr = last(mysylls)
+						newstr = tempstr * chars[c]
+						pop!(mysylls)
+						push!(mysylls, newstr)
+						prevchartype = getchartype(chars[c])
+					end
+				end
+			end
+				
+		end
+			
+		
+	end
+	mysylls
+end 
+
+# ╔═╡ 625c506a-93aa-456e-a5ce-c042cc988077
+#=
+typeoflast = begin
+			lastchar = last(last(mysylls))
+			if (lastchar in _CONSONANTS) "consonant"
+			else "vowel"
+			end
+		end
+=#
+
+# ╔═╡ 9e8dcb73-725f-447f-8666-e342c5408411
+testsyll(ilchars)
+
+# ╔═╡ 87ed2d9f-8ab7-45ee-8a64-0cf4254b4535
+xx = ["abc","bcd","cde"]
+
+# ╔═╡ 1b8cfd0b-395b-4a01-a190-b024053338d1
+m = match(r"([a-z])[)/\\=]+([a-z])", "ai")
+
+# ╔═╡ 58419859-140f-42b4-b716-51dad4379462
+m == nothing
+
+# ╔═╡ b0c8f19e-3115-4ead-931e-9b5a025e3768
+replace("a)/i", r"[)(/\\=|]" => "")
+
+
+# ╔═╡ fc336075-5dd9-4fad-9ee2-84fc964dd2dd
+x = split("ε᾽","")
+
+# ╔═╡ 89fc7e92-6cc0-4784-a7f3-7242270fbf89
+x[2][1]
+
+# ╔═╡ 7f61b3c7-bee7-4ddc-af27-6f34daa1957f
+Unicode.normalize("οὐλομένην, ἣ μυρί᾽ Ἀχαιοῖς ἄλγε᾽ ἔθηκε,")
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -309,6 +586,7 @@ PLUTO_PROJECT_TOML_CONTENTS = """
 BetaReader = "e5583720-4bc8-44d1-bd9a-9734450b0166"
 CitableText = "41e66566-473b-49d4-85b7-da83b66615d8"
 Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
+Unicode = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
 
 [compat]
 BetaReader = "~1.0.0"
@@ -321,7 +599,7 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 julia_version = "1.11.3"
 manifest_format = "2.0"
-project_hash = "a477da60dfde0b46e5325a893231d0a72c050d13"
+project_hash = "384dc404dbd1120a8eb8e82621c1db7445e3965a"
 
 [[deps.ANSIColoredPrinters]]
 git-tree-sha1 = "574baf8110975760d391c710b6341da1afa48d8c"
@@ -881,7 +1159,7 @@ version = "5.11.0+0"
 # ╠═78253de4-f4f5-4043-8c4d-7b2736909f2a
 # ╠═e8135c67-b65d-44c5-98ff-c05a250acb3c
 # ╠═b83a7edc-8dbc-48be-8630-72f8a4d7ed82
-# ╠═b62b1830-bf18-4970-880b-dd145b7113fb
+# ╟─b62b1830-bf18-4970-880b-dd145b7113fb
 # ╠═442460a4-1ea6-43bb-ac7c-674d7294d383
 # ╠═a9453df4-ebe9-497b-857d-8f9fb72646ea
 # ╠═b62999e7-1824-4b92-9bb6-5718552c0324
@@ -906,6 +1184,32 @@ version = "5.11.0+0"
 # ╠═7cc57aae-3e74-4b8a-ac0a-fe6d03e88d90
 # ╠═bebe3e74-f1d3-4ac6-bb5f-16af579cf810
 # ╠═8ed701f9-364a-4cc5-a36d-9f51eea5ffd1
+# ╠═5413e075-5a9b-476d-a1ae-7cde1235baed
+# ╠═0e21304f-bf0d-497e-8b73-2d931e748abb
+# ╠═0af04859-b342-4d3c-b7cf-1891e8e68c27
 # ╠═9d3bcf80-9601-4fa7-9601-4c3160af97ca
+# ╠═62f50f61-d483-460a-b12d-c30ad3d4d0be
+# ╠═b77b41de-0b7d-45be-b4a1-07eefc40beca
+# ╠═cbe410ff-7bcc-4043-81ff-1198babd45c8
+# ╠═feefac3f-f62e-4783-8264-86b54a08ba3b
+# ╠═43ed1d11-f987-4cf1-b575-8e0c49a068d4
+# ╠═b9bd7f24-cf50-437e-bbc8-911f5a578fe5
+# ╠═36d2f75f-ba4a-46d6-a3f5-0aa9d041e13a
+# ╠═bd45d99d-2194-488e-98d1-56ee5cd6f180
+# ╠═a7cceb2a-7986-4f8e-915c-4b10d1a22dd3
+# ╠═162347d7-5779-4eae-8228-060f26857aae
+# ╠═2cc3cc8d-86d4-4fda-9b2e-cf60d3e9c97e
+# ╠═d4b6ef06-3af2-48b2-ad0f-2d56c26e8a16
+# ╠═2c06cbcc-3bce-4d7d-bac6-963414fc8a74
+# ╠═1fa553e1-b23f-4baf-9bf1-97686b944ce5
+# ╠═625c506a-93aa-456e-a5ce-c042cc988077
+# ╠═9e8dcb73-725f-447f-8666-e342c5408411
+# ╠═87ed2d9f-8ab7-45ee-8a64-0cf4254b4535
+# ╠═1b8cfd0b-395b-4a01-a190-b024053338d1
+# ╠═58419859-140f-42b4-b716-51dad4379462
+# ╠═b0c8f19e-3115-4ead-931e-9b5a025e3768
+# ╠═fc336075-5dd9-4fad-9ee2-84fc964dd2dd
+# ╠═89fc7e92-6cc0-4784-a7f3-7242270fbf89
+# ╠═7f61b3c7-bee7-4ddc-af27-6f34daa1957f
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002

@@ -1,8 +1,8 @@
 # MeterReader.jl
 
-[![version 0.1.0](https://img.shields.io/badge/version-0.1-blue.svg)](https://shields.io/) [![16 tests](https://img.shields.io/badge/tests-16-teal.svg)](https://shields.io/)
+[![version 0.2.0](https://img.shields.io/badge/version-0.2-blue.svg)](https://shields.io/) [![112 tests](https://img.shields.io/badge/tests-112-teal.svg)](https://shields.io/)
 
-A [Julia](https://julialang.org) library and Pluto notebooks for working with Ancient Greek poetic meter, starting with Dactylic Hexameter.
+A [Julia](https://julialang.org) library and Pluto notebooks for working with Ancient Greek Dactylic Hexameter.
 
 **Very much a work-in-progress.**
 
@@ -13,10 +13,3 @@ A [Julia](https://julialang.org) library and Pluto notebooks for working with An
 | Index and categorize each character | **tested** |
 | Expand "double" consonants | **tested** |
 | Align characters to tokens | **tested** |
-| Syllabify for poetic analysis | TBD |
-| Assign quantities to syllables | TBD |
-| Validate hexameter line | TBD |
-| Define metrical feet | TBD |
-| Identify caesurae | TBD |
-| Statistics & Graphs | TBD |
-| Serialization of metrical analysis | TBD |

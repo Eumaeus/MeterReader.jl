@@ -5,23 +5,32 @@ function sayhi()
 
 end 
 
-#=
+#= *******************
 			Structures
-=#
+   ******************* =#
 
+"For the `wordtokens` property of a PoeticLine"
 struct IndexedString
 	i::Int64
 	s::String
 	type::String # types: text, separator, punctuation
 end
 
+"For the `chars` property of a PoeticLine"
 struct AlignedChar
-	charstring::String
-	charindex::Int
+	charstring::String # in BetaCode
 	tokenindex::Int
 	type::String # types: text, separator, punctuation
+	terminator::Bool # is this the last char in a word-token?
+	charindex::Int # when we filter a Vector{AlignedChar}, we can still navigate the unfiltered Vector.
 end
 
+"Create an AlignedChar when we don't (yet) know its indexing."
+function AlignedChar(charstring::String, tokenindex::Int, type::String, terminator::Bool)
+	AlignedChar(charstring, tokenindex, type, terminator, 0)
+end
+
+"The basic unit we are analyzing."
 struct PoeticLine
    urn::CtsUrn
 	text::String
@@ -29,49 +38,99 @@ struct PoeticLine
 	chars::Vector{AlignedChar}
 end
 
-function alignChars(vis::Vector{IndexedString})
+"The basis for a `syllable`, a Vector of Aligned Chars, with their context attached in the form of the `synapheia()` that created them. An intermediate structure."
+struct BasicSyllable
+	chars::Vector{AlignedChar} # The AlignedChars that form the syllable
+	synapheia::Vector{AlignedChar} # The Vector from which the syllable was created
+	context::Vector{AlignedChar} # The whole Vector, the context for the synapheia
+end
+
+#= ******************* 
+	Constructors
+   ******************* =#
+
+"Given a CEX fragment, with urn and text and a '#' delimiter, return a textNode"
+function citablePassage(s::String)::CitablePassage
+	urnString = split(s, "#")[1]
+	text = split(s, "#")[2]
+	urn::CtsUrn = CtsUrn(urnString)
+	CitablePassage(urn, text)
+end
+
+"Given a Vector of IndexedString, return a vector of AlignedChar objects, aligned to each IndexedString"
+function alignChars(vis::Vector{IndexedString})::Vector{AlignedChar}
 	# Get characters for each indexed token
-	#		lower-case and swap all sigmas for lunate forms
+	#		treat sigmas, probably unneccesary
 	#		Assign token-index and type 
 	vvac::Vector{Vector{AlignedChar}} = map(vis) do tok
-		newTokString = replace(tok.s, r"[σς]" => "ϲ") |> lowercase
-		tokchars::Vector{AlignedChar} = map(collect(newTokString)) do c
-			AlignedChar(string(c), 0, tok.i, tok.type)
+
+		tokchars::Vector{AlignedChar} = map( eachindex(collect(tok.s))) do c 
+			charString = string(collect(tok.s)[c]) |> unicodeToBeta
+			if (c == length(collect(tok.s)))
+				 AlignedChar(charString, tok.i, tok.type, true)
+			else
+				 AlignedChar(charString, tok.i, tok.type, false)
+			end
 		end
+
 	end
+
 	# Flatten
 	vac::Vector{AlignedChar} = vcat(vvac...)
-	# Re-index sequentially, catching double-consonants
+	# Beta-code, then…
+	# Treat double-consonants and iota-subscripts
 	newVec = [] 
 	for i in eachindex(vac)
+		charString = vac[i].charstring
 		# Catch double-chars and deal with them…
-		if (contains( "ζξψ", vac[i].charstring))
-			if (vac[i].charstring == "ξ")
-				cc = AlignedChar( "κ", i, vac[i].tokenindex, vac[i].type )
+		if (contains( "zcy", charString))
+			if (vac[i].charstring == "c")
+				cc = AlignedChar( "k", vac[i].tokenindex, vac[i].type, false )
 				push!(newVec, cc)
-				cc = AlignedChar( "ϲ", i, vac[i].tokenindex, vac[i].type )
+				cc = AlignedChar( "s", vac[i].tokenindex, vac[i].type, vac[i].terminator )
 				push!(newVec, cc)
-			elseif (vac[i].charstring == "ζ")
-				cc = AlignedChar( "ϲ", i, vac[i].tokenindex, vac[i].type )
+			elseif (vac[i].charstring == "z")
+				cc = AlignedChar( "s", vac[i].tokenindex, vac[i].type, false )
 				push!(newVec, cc)
-				cc = AlignedChar( "δ", i, vac[i].tokenindex, vac[i].type )
+				cc = AlignedChar( "d", vac[i].tokenindex, vac[i].type, vac[i].terminator )
 				push!(newVec, cc)
-			elseif (vac[i].charstring == "ψ")
-				cc = AlignedChar( "π", i, vac[i].tokenindex, vac[i].type )
+			elseif (vac[i].charstring == "y")
+				cc = AlignedChar( "p", vac[i].tokenindex, vac[i].type, false )
 				push!(newVec, cc)
-				cc = AlignedChar( "ϲ", i, vac[i].tokenindex, vac[i].type )
+				cc = AlignedChar( "s", vac[i].tokenindex, vac[i].type, vac[i].terminator )
 				push!(newVec, cc)
 			end
+		# Iota-subscripts to adscripts
+		elseif ( contains( charString, "|" ) )
+			removeIota = replace(charString, "|" => "")
+			newUC = removeIota
+			cc = AlignedChar( newUC, vac[i].tokenindex, vac[i].type, false )
+			push!(newVec, cc)
+			cc = AlignedChar( "i", vac[i].tokenindex, vac[i].type, vac[i].terminator )
+			push!(newVec, cc)
 		else
-			cc = AlignedChar( vac[i].charstring, i, vac[i].tokenindex, vac[i].type )
+			cc = AlignedChar( charString, vac[i].tokenindex, vac[i].type, vac[i].terminator )
 			push!(newVec, cc)
 		end
 	end
 
-	return newVec
+	## re-index newVec
+	indexedVec = []
+	for i in eachindex(newVec)
+			cc = AlignedChar( newVec[i].charstring, newVec[i].tokenindex, newVec[i].type, newVec[i].terminator, i )
+			push!(indexedVec, cc)
+	end
+
+	return indexedVec
 
 end
 
+"Given a CITE CitablePassage, return a PoeticLine"
+function makePoeticLine(citablePassage::CitablePassage)
+	makePoeticLine(citablePassage.urn, string(citablePassage.text))
+end
+
+"Given a CITE CitablePassage's parts, URN and Text, return a PoeticLine"
 function makePoeticLine(urn::CtsUrn, text::String)
 	tokenized = split_and_retain(text)
 	wtoks::Vector{IndexedString} = begin
@@ -84,86 +143,69 @@ function makePoeticLine(urn::CtsUrn, text::String)
 	PoeticLine(urn, text, wtoks, chars)
 end
 
+"Create a PoeticLine from a string-represention of a CTS-URN and a String"
 function makePoeticLine(urnstring::String, text::String)
 	u = CtsUrn(urnstring)
 	makePoeticLine(u, text)
 end
 
-
-
+" Given a String, categorize it as 'punctuation', 'separator', 'colon', or 'text'. 'colon' is any punctuation that marks a break in syntax or pause in the poetic line. This depends on constants defined in Constants.jl"
 function typeToken(s::String)::String 
-	puncs = """()[]{}·⸁.,;"?·!–—⸂⸃"""
+	
 	seps = """ \n\t"""
 	firstChar = string(s[1])
 	category = begin
-		if (contains(puncs, firstChar))
+		if (contains(_MISCPUNCTUATION, firstChar))
 			"punctuation"
-		elseif (contains(seps,firstChar))
+		elseif (contains(_SEPARATORS, firstChar))
 			"separator"
+		elseif (contains(_COLONPUNCTUATION,firstChar))
+			"colon"
 		else
 			"text"
 		end 
  	end
 end
 
-#=
-			Functions
-=#
+#= ******************* 
+	Functions
+   ******************* =#
 
-# Implemenent eachwithindex(v::Vector[Any]) like in Scala
 
-function eachwithindex(v::Vector)::Vector{Tuple{Int64, Any}}
-    map(eachindex(v)) do i 
-        (i, v[i])
-    end
-end
+"Given a PoeticLine and a token-index, return a Vector{AlignedChar} of the charcters associated with that token."
+function charsForToken(poeticline::PoeticLine, token::Int64)::Vector{AlignedChar}
 
-# Big one: split_and_retain 
-
-" All-purpose list of punctuation "
-const_splitters = """\n\t(){}[]·⸁.,; "?·!–—⸂⸃"""
-
-" Escape a string, for splitting"
-function escape_string(c::String)::String
-    # Escape special regex characters
-    return occursin(r"[\^$.|?*+(){}[\]\\]", c) ? "\\" * c : c
-end
-
-" Split string, retaining the characters on which you split"
-function split_and_retain(my_text::String, split_characters::String = """\n()[]·⸁.,; "?·!–—⸂⸃""")::Vector{String}
-
-	# Escape each character in split_characters to handle special regex characters
-    escaped_splitters = join([escape_string(string(c)) for c in split_characters], "")
-	# Turn my_text into an array of Char
-	my_text_chars = collect(my_text)
-    
-	   
-    # Initialize result and tracking index
-    result = String[]
-    last_index = 1
-    
-    # Iterate through each match of the split_regex
-    for c in eachindex(my_text_chars)
-		if ( contains(escaped_splitters, my_text_chars[c] ) )
-			# get previous chunk
-			prevchunk = join(my_text_chars[last_index:c-1])
-			if (length(prevchunk) > 0)
-				push!(result, prevchunk)
-			end
-			# add splitter
-			push!(result, string(my_text_chars[c]))
-			# update lastindex
-			last_index = c + 1
-		end		
+	returnVec::Vector{AlignedChar} = filter(poeticline.chars) do c 
+		c.tokenindex == token
 	end
-	
-	# Add any remaining text after the last match
-    if last_index <= length(my_text_chars)
-        push!(result, join( my_text_chars[last_index:end]) )
-    end
-	
-	result
-
 end
 
+"Given a PoeticLine and a range of token-indices, return a Vector{AlignedChar} of the charcters associated with that range of token."
+function charsForToken(poeticline::PoeticLine, tokens::UnitRange{Int64})::Vector{AlignedChar}
+
+	returnVec::Vector{AlignedChar} = filter(poeticline.chars) do c 
+		c.tokenindex in tokens
+	end
+end
+
+"Given a Vector{AlignedChar} and a token-index, return a Vector{AlignedChar} of the charcters associated with that token."
+function charsForToken(chars::Vector{AlignedChar}, token::Int64)::Vector{AlignedChar}
+
+	returnVec::Vector{AlignedChar} = filter(chars) do c 
+		c.tokenindex == token
+	end
+end
+
+"Given a Vector{AlignedChar} and a range of token-indices, return a Vector{AlignedChar} of the charcters associated with that range of token."
+function charsForToken(chars::Vector{AlignedChar}, tokens::UnitRange{Int64})::Vector{AlignedChar}
+
+	returnVec::Vector{AlignedChar} = filter(chars) do c 
+		c.tokenindex in tokens
+	end
+end
+
+#"Given a PoeticLine, return version containing only text-tokens "
+#function justWords(poeticline::PoeticLine)::PoeticLine
+#	
+#end
 

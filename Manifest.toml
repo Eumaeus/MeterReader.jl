@@ -2,7 +2,7 @@
 
 julia_version = "1.11.3"
 manifest_format = "2.0"
-project_hash = "d26be94aefe2d2ed0cdd48c52b979fd8672a2a33"
+project_hash = "fe0ff61b1231ffb02c2bb823724416853f2fae62"
 
 [[deps.ANSIColoredPrinters]]
 git-tree-sha1 = "574baf8110975760d391c710b6341da1afa48d8c"
@@ -11,14 +11,16 @@ version = "0.0.1"
 
 [[deps.Adapt]]
 deps = ["LinearAlgebra", "Requires"]
-git-tree-sha1 = "50c3c56a52972d78e8be9fd135bfb91c9574c140"
+git-tree-sha1 = "cd8b948862abee8f3d3e9b73a102a9ca924debb0"
 uuid = "79e6a3ab-5dfb-504d-930d-738a2a938a0e"
-version = "4.1.1"
+version = "4.2.0"
 
     [deps.Adapt.extensions]
+    AdaptSparseArraysExt = "SparseArrays"
     AdaptStaticArraysExt = "StaticArrays"
 
     [deps.Adapt.weakdeps]
+    SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
     StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 
 [[deps.AliasTables]]
@@ -37,9 +39,9 @@ version = "1.11.0"
 
 [[deps.BetaReader]]
 deps = ["Compat", "DocStringExtensions", "Documenter", "IterTools", "PolytonicGreek", "Test", "TestSetExtensions", "Unicode"]
-git-tree-sha1 = "2a7b80b8cac05ce67b3e398a31c7c716bbe95eb5"
+git-tree-sha1 = "60b527a69c652c9bec74d572ec24181680dfd2f0"
 uuid = "e5583720-4bc8-44d1-bd9a-9734450b0166"
-version = "1.0.0"
+version = "2.2.3"
 
 [[deps.BitFlags]]
 git-tree-sha1 = "0691e34b3bb8be9307330f88d1a3c3f25466c24d"

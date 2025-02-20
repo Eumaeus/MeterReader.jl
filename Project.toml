@@ -1,15 +1,17 @@
 name = "MeterReader"
 uuid = "e4974282-f47c-4920-baad-a3ebf6911431"
 authors = ["Eumaeus <cwblackwell@gmail.com>"]
-version = "0.1.0"
+version = "0.2.0"
 
 [deps]
 BetaReader = "e5583720-4bc8-44d1-bd9a-9734450b0166"
+CitableCorpus = "cf5ac11a-93ef-4a1a-97a3-f6af101603b5"
 CitableText = "41e66566-473b-49d4-85b7-da83b66615d8"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 Unicode = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
 
 [compat]
-BetaReader = "1.0.0"
+BetaReader = "2.0.0"
+CitableCorpus = "0.13.5"
 CitableText = "0.16.2"
 Test = "1.11.0"
