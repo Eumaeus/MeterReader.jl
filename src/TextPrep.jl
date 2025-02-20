@@ -51,6 +51,19 @@ struct BasicSyllable
 	context::Vector{AlignedChar} # The whole Vector, the context for the synapheia
 end
 
+function showsyllable(basicsyll::BasicSyllable)
+	sylsstring = map(bsc -> bsc.charstring, basicsyll.chars) |> join
+end
+
+
+function showsyllable(vbs::Vector{BasicSyllable})
+	stringvec::Vector{String} = map(vbs) do bs
+		showsyllable(bs)
+	end
+	join(stringvec, " - ")
+end
+
+
 #= ******************* 
 	Constructors
    ******************* =#

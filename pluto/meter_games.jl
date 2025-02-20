@@ -578,7 +578,7 @@ x = split("ε᾽","")
 x[2][1]
 
 # ╔═╡ 7f61b3c7-bee7-4ddc-af27-6f34daa1957f
-Unicode.normalize("οὐλομένην, ἣ μυρί᾽ Ἀχαιοῖς ἄλγε᾽ ἔθηκε,")
+append([1],[2])
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """

@@ -163,6 +163,11 @@ function isdiphthong(vac::Vector{AlignedChar})::Bool
 	isdiphthong(vs)
 end
 
+"Is a pair of AlignedCharacters possibly a diphthong?"
+function isdiphthong(ac1::AlignedChar, ac2::AlignedChar)
+	isdiphthong([ac1, ac2])
+end
+
 "Is a beta-code representation of a character a vowel or consonant?"
 function getchartype(s::String)
 	if isavowel(s) "vowel"

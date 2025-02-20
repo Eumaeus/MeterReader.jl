@@ -453,6 +453,21 @@ end
 
 	@test begin
 		l = iliadPoeticLines[2]
+		ac1 = l.chars[23] # "i"
+		ac2 = l.chars[24] # "o"
+		MeterReader.isdiphthong(ac1, ac2) == false
+	end
+
+	@test begin
+		l = iliadPoeticLines[2]
+		ac1 = l.chars[1] # "o"
+		ac2 = l.chars[2] # "u)"
+		MeterReader.isdiphthong(ac1, ac2)
+	end
+
+
+	@test begin
+		l = iliadPoeticLines[2]
 		vac = l.chars[1:2] # "ou)"
 		MeterReader.isdiphthong(vac)
 	end
