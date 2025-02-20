@@ -41,50 +41,50 @@ end
 	end
 
 	@test begin
-		chartuple = MeterReader.synapheia(iliadPoeticLines[1].chars)
-		chartuple[1][1].charindex == chartuple[2][1].charindex
+		synf = MeterReader.synapheia(iliadPoeticLines[1].chars)
+		synf.synapheia[1].charindex == synf.context[1].charindex
 	end
 
 	@test begin
-		chartuple = MeterReader.synapheia(iliadPoeticLines[1].chars)
+		synf = MeterReader.synapheia(iliadPoeticLines[1].chars)
 		nthindex = 29 # "i"
-		nthchar1 = filter(ct -> ct.charindex == 29, chartuple[1])[1]
-		nthchar2 = filter(ct -> ct.charindex == 29, chartuple[2])[1]
+		nthchar1 = filter(ct -> ct.charindex == 29, synf.synapheia)[1]
+		nthchar2 = filter(ct -> ct.charindex == 29, synf.context)[1]
 		nthchar1 == nthchar2
 	end
 
 	@test begin
-		justchars = MeterReader.synapheia(iliadPoeticLines[1].chars)[1]
+		justchars = MeterReader.synapheia(iliadPoeticLines[1].chars).synapheia
 		# println(MeterReader.showChars(justchars))
 		MeterReader.showChars(justchars) == "Mh=nina)/eideqea\\Phlhi+a/dewA)xilh=os"
 	end
 
 	@test begin
-		justchars = MeterReader.synapheia(iliadPoeticLines[2].chars)[1]
+		justchars = MeterReader.synapheia(iliadPoeticLines[2].chars).synapheia
 		# println(MeterReader.showChars(justchars))
 		MeterReader.showChars(justchars) == "ou)lome/nhnh(\\muri/A)xaioi=sa)/lgee)/qhke"
 	end
 
 	@test begin
-		justchars = MeterReader.synapheia(iliadPoeticLines[2].chars, true, true, true)[1]
+		justchars = MeterReader.synapheia(iliadPoeticLines[2].chars, true, true, true).synapheia
 		ts = """ou)lome/nhn,h(\\muri/'A)xaioi=sa)/lge'e)/qhke,"""
 		MeterReader.showChars(justchars) == ts
 	end
 
 	@test begin
-		justchars = MeterReader.synapheia(iliadPoeticLines[1].chars, false)[1]
+		justchars = MeterReader.synapheia(iliadPoeticLines[1].chars, false).synapheia
 		# println(MeterReader.showChars(justchars))
 		MeterReader.showChars(justchars) == "MhninaeideqeaPhlhi+adewAxilhos"
 	end
 
 	@test begin
-		justchars = MeterReader.synapheia(iliadPoeticLines[1].chars, false, false)[1]
+		justchars = MeterReader.synapheia(iliadPoeticLines[1].chars, false, false).synapheia
 		# println(MeterReader.showChars(justchars))
 		MeterReader.showChars(justchars) == "MhninaeideqeaPhlhiadewAxilhos"
 	end
 
 	@test begin
-		justchars = MeterReader.synapheia(iliadPoeticLines[2].chars, false)[1]
+		justchars = MeterReader.synapheia(iliadPoeticLines[2].chars, false).synapheia
 		# println(MeterReader.showChars(justchars))
 		MeterReader.showChars(justchars) == "oulomenhnhmuriAxaioisalgeeqhke"
 	end
@@ -102,21 +102,21 @@ end
 	end
 
 	@test begin
-		justchars = MeterReader.synapheia(iliadPoeticLines[1].chars)[1]
+		justchars = MeterReader.synapheia(iliadPoeticLines[1].chars).synapheia
 		cft = MeterReader.charsForToken(justchars, 3)
 		# println(MeterReader.showChars(cft))
 		MeterReader.showChars(cft) == "a)/eide"
 	end
 
 	@test begin
-		justchars = MeterReader.synapheia(iliadPoeticLines[1].chars)[1]
+		justchars = MeterReader.synapheia(iliadPoeticLines[1].chars).synapheia
 		cft = MeterReader.charsForToken(justchars, 1:3)
 		# println(MeterReader.showChars(cft))
 		MeterReader.showChars(cft) == "Mh=nina)/eide"
 	end
 
 	@test begin
-		justchars = MeterReader.synapheia(iliadPoeticLines[1].chars)[1]
+		justchars = MeterReader.synapheia(iliadPoeticLines[1].chars).synapheia
 		cft = MeterReader.charsForToken(justchars, 1:3)
 		# println(MeterReader.showChars(cft))
 		MeterReader.showChars(cft) == "Mh=nina)/eide"

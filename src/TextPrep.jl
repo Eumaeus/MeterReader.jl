@@ -38,6 +38,12 @@ struct PoeticLine
 	chars::Vector{AlignedChar}
 end
 
+"A tuple of Vector{AlignedChar}s. The output of `synaphoreia()`. Useful for keeping straight which is the synaphoreia and which is the whole context."
+struct Synapheia
+	synapheia::Vector{AlignedChar}
+	context::Vector{AlignedChar}
+end
+
 "The basis for a `syllable`, a Vector of Aligned Chars, with their context attached in the form of the `synapheia()` that created them. An intermediate structure."
 struct BasicSyllable
 	chars::Vector{AlignedChar} # The AlignedChars that form the syllable

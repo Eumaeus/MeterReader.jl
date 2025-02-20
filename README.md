@@ -13,3 +13,6 @@ A [Julia](https://julialang.org) library and Pluto notebooks for working with An
 | Index and categorize each character | **tested** |
 | Expand "double" consonants | **tested** |
 | Align characters to tokens | **tested** |
+| Synaphoreia of tokens in poetic line | **tested** |
+| Basic poetic syllabification | in progress |
+

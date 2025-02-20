@@ -1,6 +1,6 @@
 
 "Return a copy of a Vector{AlignedChar} for syllabification. The first Bool param determines whether accents and breathings are preserved or not; the second determines whether the diaeresis is preserved; the third determines whether punctuation is preserved."
-function synapheia(charvec::Vector{AlignedChar}, diacriticals = true, diaeresis = true, punctuation = false)::Tuple{Vector{AlignedChar}, Vector{AlignedChar}}
+function synapheia(charvec::Vector{AlignedChar}, diacriticals = true, diaeresis = true, punctuation = false)::Synapheia
 
 	justchars = begin
 		if (punctuation == false)
@@ -38,7 +38,7 @@ function synapheia(charvec::Vector{AlignedChar}, diacriticals = true, diaeresis 
 		end
 	end
 
-	(returnchars, charvec)
+	Synapheia(returnchars, charvec)
 
 end
 
