@@ -130,14 +130,51 @@ function makesyll(vac::Vector{AlignedChar}, snf::Synapheia )
 end
 
 "Given a Vector{BasicSyllable} and an index, evaluate the syllable and return an AnnotatedSyllable"
-function evaluate(vbs::Vector{BasicSyllable}, index::Int) # ::AnnotatedSyllable
+function evaluate(vbs::Vector{BasicSyllable}, index::Int)::AnnotatedSyllable
 	# BasicSyllable -> .chars::Vector{AnnotatedChar}
 	thissyll::BasicSyllable = vbs[index] 
-	thesechars::Vector{AnnotatedSyllable} = thissyll.chars
-
-	quantity::String = begin
-
+	cc::Vector{AlignedChar} = thissyll.chars
+	flags::Vector{String} = []
+	rules::Vector{String} = []
+	nextchar::Union{Vector{AlignedChar}, Nothing} = begin
+		if (index == length(vbs)) nothing
+		else (vbs[index+1].chars)
+		end
 	end
 
-	nothing
+	quantity::String = begin
+		# Is it obviously short and un-closed? Mark short
+		if ( (vowelquantity(cc) == "short") && (isclosedsyllable(cc) == false) ) 
+			"short"
+
+			# Is it followed by a vowel or diphthong? If so flag for possible synizesis
+				# Is it followed by a colon? If so, flag that.
+		# Is is inherently long?
+		elseif ( vowelquantity(cc) == "long" )
+			"long"
+
+			# Is it un-closed and followed by a vowel? If so, flag for correption and synizesis
+				# Is it followed by a colon? If so, flag that.
+		# Is it a diphthong? Mark long but flag for possible hiatus
+		elseif ( isdiphthong(cc) )
+			"long"
+
+			# Is it unclosed and followed by a vowel or diphthong, flag for correption and synizesis
+				# Is it followed by a colon? If so, flag that.
+		# Is it closed? Mark long.
+		elseif ( isclosedsyllable(cc) )
+			"long"
+
+		elseif ( (vowelquantity(cc) == "ambiguous") && (isclosedsyllable(cc) == false) )
+			"ambiguous"
+
+		else
+			"error"
+
+		end # big "if"
+
+	end # quantity assignment
+
+	AnnotatedSyllable( thissyll, quantity, flags, rules)
+
 end

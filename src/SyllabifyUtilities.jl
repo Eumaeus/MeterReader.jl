@@ -139,8 +139,8 @@ end
 "Is a beta-code string-representation of a character a long-vowel, short-vowel, ambiguous-vowel, or none?"
 function vowelquantity(s::String)::String
 	basestring = filter(stripdiacriticals(s)) do sd
-		string(sd) in _VOWELS # remember when you filter a string, you are working with characters!
-	end
+		lowercase(string(sd)) in _VOWELS # remember when you filter a string, you are working with characters!
+	end |> lowercase
 	if (isavowel(s) == false) 
 		"error"
 	else
@@ -171,7 +171,17 @@ function vowelquantity(vac::Vector{AlignedChar})::String
 	vowelquantity(s)
 end
 
+"Is a beta-code string representation of a syllable 'closed'?"
+function isclosedsyllable(s::String)::Bool
+	lc::String = last(s) |> string |> lowercase
+	isaconsonant(lc)
+end
 
+"Does a Vector{AlignedChar} represent a 'closed' syllable?"
+function isclosedsyllable(vac::Vector{AlignedChar})::Bool
+	lc::String = last(vac).charstring |> lowercase
+	isaconsonant(lc)
+end
 
 "Is a beta-code string-representation of a character a consonent?"
 function isaconsonant(s::String)::Bool

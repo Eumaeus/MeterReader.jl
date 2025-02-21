@@ -80,7 +80,7 @@ end
 "Construct an AnnotatedSyllable without .rules"
 function AnnotatedSyllable(syllable::BasicSyllable, quantity::String, flags::Vector{String})
 	emptyrules::Vector{String} = []
-	AnnotatedSyllable(syllable, quantity, flags, emptyrules)
+	AnnotatedSyllable(syllable, quantity, flags, emptyrules, false)
 end
 
 "Construct an AnnotatedSyllable without .flags or .rules"

@@ -578,35 +578,13 @@ x = split("ε᾽","")
 x[2][1]
 
 # ╔═╡ 7f61b3c7-bee7-4ddc-af27-6f34daa1957f
-# RULES 
-const _RULES  =  Dict(
-	"long_vowel" => 0,
-	"short_vowel" => 0,
-	"closed" => 0,
-	"diphthong" => 0,
-	"circumflex" => 0,
-	"circumflex_on_diphthong" => 0,
-	"hiatus" => 0, #diphthong treated as two syllabic vowels
-	"hiatus_diaeresis" => 0,
-	"hiatus_punctuation" => 0,
-	"ellision" => 0,
-	"closed_syllable" => 0,
-	"synizesis" => 0, # discrete vowels turned into diphthon/long-vowel
-	"correption_swapped" => 0, # e.g. "-ου ε-" -> short-long, see 1.14
-	"correption_2_short" => 0, # e.g. "-ει ε-" -> short short
-	"long_by_position" => 0, # e.g. final-foot trochee
-	"rho_cluster" => 0, 
-	"lambda_cluster" => 0, 
-	"sigma_cluster" => 0,
-	"alpha_short" => 0,
-	"alpha_long" => 0,
-	"iota_short" => 0,
-	"iota_long" => 0,
-	"upsilon_short" => 0,
-	"upsilon_long" => 0,
-	"sponaic_5th" => 0,
-	"short_no_reason" => 0
-)
+last([1,2,3])
+
+# ╔═╡ 9e12239b-8d7f-4661-82e6-075931f35289
+un::Union{String, Nothing} = "dogs"
+
+# ╔═╡ a5ccfd14-79aa-4686-b564-02c2d66d5261
+typeof(un)
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -1239,5 +1217,7 @@ version = "5.11.0+0"
 # ╠═fc336075-5dd9-4fad-9ee2-84fc964dd2dd
 # ╠═89fc7e92-6cc0-4784-a7f3-7242270fbf89
 # ╠═7f61b3c7-bee7-4ddc-af27-6f34daa1957f
+# ╠═9e12239b-8d7f-4661-82e6-075931f35289
+# ╠═a5ccfd14-79aa-4686-b564-02c2d66d5261
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002

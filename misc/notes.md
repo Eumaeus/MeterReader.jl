@@ -20,6 +20,8 @@ Synizesis (/ˌsɪnəˈziːsɪs/) is a sound change (metaplasm) in which two orig
 
 [Scanned Iliad, for reference](https://hypotactic.com/homer/scanned/iliad1scanned.html)
 
+[Dickenson has some good rules](https://dcc.dickinson.edu/grammar/monro/elision-crasis-synizesis)
+
 ## Description
 
 To understand Greek epic poetry, it seems necessary to include the metrical scansion of each line along with considerations of vocabulary, morphology, and syntax. A line of text with a schematic representation of scansion is not sufficient for this kind of integrated analysis. This package intends to analyze lines of dactylic hexameter while retaining a *citable* connection between half-line, foot, half-foot, syllable and the text. 

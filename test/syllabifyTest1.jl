@@ -557,12 +557,27 @@ end
 	end
 
 	@test begin
+		s = "A)="
+		MeterReader.vowelquantity(s) == "long"
+	end
+
+	@test begin
 		s = "i"
 		MeterReader.vowelquantity(s) == "ambiguous"
 	end
 
 	@test begin
+		s = "I"
+		MeterReader.vowelquantity(s) == "ambiguous"
+	end
+
+	@test begin
 		s = "u="
+		MeterReader.vowelquantity(s) == "long"
+	end
+
+	@test begin
+		s = "U="
 		MeterReader.vowelquantity(s) == "long"
 	end
 
@@ -617,6 +632,51 @@ end
 		l = iliadPoeticLines[2]
 		vac::Vector{MeterReader.AlignedChar} = l.chars[1:3] # "οὐλ" 
 		MeterReader.vowelquantity(vac) == "error"
+	end
+
+	# Test for closed syllables
+	@test begin
+		s = "hi"
+		MeterReader.isclosedsyllable(s) == false
+	end	
+
+	@test begin
+		s = "to\\n"
+		MeterReader.isclosedsyllable(s) == true
+	end	
+
+	@test begin
+		s = "A)/N"
+		MeterReader.isclosedsyllable(s) == true
+	end	
+
+	@test begin
+		s = "tw="
+		MeterReader.isclosedsyllable(s) == false
+	end
+
+	@test begin
+		l = iliadPoeticLines[2]
+		vac::Vector{MeterReader.AlignedChar} = l.chars[1:3] # "οὐλ" 
+		MeterReader.isclosedsyllable(vac) == true
+	end
+
+	@test begin
+		l = iliadPoeticLines[2]
+		vac::Vector{MeterReader.AlignedChar} = l.chars[28:29] # "οὐλ" 
+		MeterReader.isclosedsyllable(vac) == true
+	end
+
+	@test begin
+		l = iliadPoeticLines[1]
+		vac::Vector{MeterReader.AlignedChar} = l.chars[1:2] # "Μῆ" 
+		MeterReader.isclosedsyllable(vac) == false
+	end
+
+	@test begin
+		l = iliadPoeticLines[1]
+		vac::Vector{MeterReader.AlignedChar} = l.chars[1:2] # "Μῆ" 
+		!MeterReader.isclosedsyllable(vac) # test for this form of negation
 	end
 
 end 
