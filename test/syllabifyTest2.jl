@@ -276,6 +276,38 @@ urn:cts:greekLit:tlg0012.tlg001.perseus_grc2:1.10#νοῦσον ἀνὰ στρ�
 		as.quantity == "short"
 	end
 
+	@test begin 
+		tsi::Int = 7
+		# Get an AnnotatedSyllable
+		as::MeterReader.AnnotatedSyllable = MeterReader.evaluate(quant_test_sylls, tsi)
+		# Test as.quantity
+		as.quantity == "ambiguous"
+	end
+
+	@test begin 
+		tsi::Int = 8
+		# Get an AnnotatedSyllable
+		as::MeterReader.AnnotatedSyllable = MeterReader.evaluate(quant_test_sylls, tsi)
+		# Test as.quantity
+		as.quantity == "long"
+	end
+
+	@test begin 
+		tsi::Int = 9
+		# Get an AnnotatedSyllable
+		as::MeterReader.AnnotatedSyllable = MeterReader.evaluate(quant_test_sylls, tsi)
+		# Test as.quantity
+		as.quantity == "long"
+	end
+
+	@test begin 
+		tsi::Int = 10
+		# Get an AnnotatedSyllable
+		as::MeterReader.AnnotatedSyllable = MeterReader.evaluate(quant_test_sylls, tsi)
+		# Test as.quantity
+		as.quantity == "ambiguous"
+	end
+
 
 end
 

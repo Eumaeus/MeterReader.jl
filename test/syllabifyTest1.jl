@@ -634,6 +634,12 @@ end
 		MeterReader.vowelquantity(vac) == "error"
 	end
 
+	@test begin
+		l = iliadPoeticLines[1]
+		vac::MeterReader.AlignedChar = l.chars[21] # "ϊ" 
+		MeterReader.vowelquantity(vac) == "ambiguous"
+	end
+
 	# Test for closed syllables
 	@test begin
 		s = "hi"
@@ -643,6 +649,11 @@ end
 	@test begin
 		s = "to\\n"
 		MeterReader.isclosedsyllable(s) == true
+	end
+
+	@test begin
+		s = "i+"
+		MeterReader.isclosedsyllable(s) == false
 	end	
 
 	@test begin

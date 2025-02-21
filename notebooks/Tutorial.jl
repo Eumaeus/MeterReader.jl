@@ -26,7 +26,7 @@ end
 md"""
 # MeterReader.jl
 
-[![version 0.3.2](https://img.shields.io/badge/version-0.3-blue.svg)](https://shields.io/) [![169 tests](https://img.shields.io/badge/tests-169-teal.svg)](https://shields.io/) 
+[![version 0.3.2](https://img.shields.io/badge/version-0.3-blue.svg)](https://shields.io/) [![175 tests](https://img.shields.io/badge/tests-175-teal.svg)](https://shields.io/) 
 
 [GitHub](https://github.com/Eumaeus/MeterReader.jl): <https://github.com/Eumaeus/MeterReader.jl>
 
