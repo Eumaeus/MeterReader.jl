@@ -17,4 +17,7 @@ A [Julia](https://julialang.org) library and Pluto notebooks for working with An
 | Basic poetic syllabification | **tested** |
 | Quantification of syllables | **tested** |
 | Identification of edge cases | in progress |
-
+| Parsing | TDB |
+| Evaulation of candidates | TBD |
+| Serialization of parsed poetic lines | TBD |
+| Examples of use | TBD |
