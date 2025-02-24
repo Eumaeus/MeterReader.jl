@@ -16,7 +16,7 @@ A [Julia](https://julialang.org) library and Pluto notebooks for working with An
 | Synaphoreia of tokens in poetic line | **tested** |
 | Basic poetic syllabification | **tested** |
 | Quantification of syllables | **tested** |
-| Identification of edge cases | in progress |
+| Identification of edge cases | **tested** |
 | Parsing | TDB |
 | Evaulation of candidates | TBD |
 | Serialization of parsed poetic lines | TBD |
