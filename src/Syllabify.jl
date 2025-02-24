@@ -136,36 +136,60 @@ function evaluate(vbs::Vector{BasicSyllable}, index::Int)::AnnotatedSyllable
 	cc::Vector{AlignedChar} = thissyll.chars
 	flags::Vector{String} = []
 	rules::Vector{String} = []
-	nextchar::Union{Vector{AlignedChar}, Nothing} = begin
+	nextsyll::Union{BasicSyllable, Nothing} = begin
 		if (index == length(vbs)) nothing
-		else (vbs[index+1].chars)
+		else (vbs[index+1])
 		end
 	end
+
+	# Is it followed by a colon? If so, flag that.
+	if (endswithcolon(thissyll)) push!(flags, "colon_after") end
+	# Is it followed by a word-break? If so, flag that.
+	if (wordbreakafter(thissyll)) push!(flags, "wordbreak_after") end
 
 	quantity::String = begin
 		# Is it obviously short and un-closed? Mark short
 		if ( (vowelquantity(cc) == "short") && (isclosedsyllable(cc) == false) ) 
+			# Is it followed by a vowel or diphthong? If so flag for possible synizesis
+			if ( beginswithvowel(nextsyll) )
+				push!(flags, "possible_ellision")
+				push!(flags, "possible_synizesis")
+			end
+
 			"short"
 
-			# Is it followed by a vowel or diphthong? If so flag for possible synizesis
-				# Is it followed by a colon? If so, flag that.
 		# Is is inherently long?
 		elseif ( vowelquantity(cc) == "long" )
+			# Is it un-closed and followed by a vowel? If so, flag for correption and synizesis
+			if ( (isclosedsyllable(cc) == false) && ( beginswithvowel(nextsyll)) )
+				push!(flags, "possible_synizesis")
+				push!(flags, "possible_correption")
+			end
+
 			"long"
 
-			# Is it un-closed and followed by a vowel? If so, flag for correption and synizesis
-				# Is it followed by a colon? If so, flag that.
 		# Is it a diphthong? Mark long but flag for possible hiatus
 		elseif ( isdiphthong(cc) )
+			# Is it un-closed and followed by a vowel? If so, flag for correption and synizesis
+			if ( (isclosedsyllable(cc) == false) && ( beginswithvowel(nextsyll)) )
+				push!(flags, "possible_synizesis")
+				push!(flags, "possible_correption")
+			end			
+			push!(flags, "possible_hiatus")
+
 			"long"
 
-			# Is it unclosed and followed by a vowel or diphthong, flag for correption and synizesis
-				# Is it followed by a colon? If so, flag that.
 		# Is it closed? Mark long.
 		elseif ( isclosedsyllable(cc) )
+
 			"long"
 
 		elseif ( (vowelquantity(cc) == "ambiguous") && (isclosedsyllable(cc) == false) )
+			if ( beginswithvowel(nextsyll) )
+				push!(flags, "possible_ellision")
+				push!(flags, "possible_synizesis")
+			end
+
 			"ambiguous"
 
 		else
@@ -174,7 +198,9 @@ function evaluate(vbs::Vector{BasicSyllable}, index::Int)::AnnotatedSyllable
 		end # big "if"
 
 	end # quantity assignment
-
-	AnnotatedSyllable( thissyll, quantity, flags, rules)
+	as = AnnotatedSyllable( thissyll, quantity, flags, rules)
+	return as
 
 end
+
+

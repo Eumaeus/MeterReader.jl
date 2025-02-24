@@ -2,13 +2,18 @@
 			Functions
 =#
 
-# Implemenent eachwithindex(v::Vector[Any]) like in Scala
-
+"Implemenent zipWithIndex(v::Vector{Any}) like in Scala"
 function eachwithindex(v::Vector)::Vector{Tuple{Int64, Any}}
     map(eachindex(v)) do i 
         (i, v[i])
     end
 end
+
+"Implement sliding(v::Vector{Any}, size{Int}, step{Int}) like in Scala"
+function sliding(arr, size, step=1)
+    return [arr[i:i+size-1] for i in 1:step:length(arr)-size+1]
+end
+
 
 # Big one: split_and_retain 
 

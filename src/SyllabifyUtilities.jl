@@ -102,6 +102,47 @@ function containsvowel(vac::Vector{AlignedChar})::Bool
 	length(fs) > 0
 end
 
+"Does a beta-code string contain a diphthong? (Must be contiguous characters!)"
+function containsdiphthong(s::String)::Bool
+	lcs = lowercase(s)
+	vowelsanddiacritics = filter(lcs) do c 
+		!occursin(string(c), _ALLPUNCTUATION) &&
+		!occursin(string(c), _SEPARATORS) &&
+		!(string(c) in _CONSONANTS)
+	end |> join
+
+	# First see if there might be a diphthong, irrespective of diacriticals
+	justvowels::String = MeterReader.stripdiacriticals(vowelsanddiacritics)
+	# Get a vector of each pair of characters
+	letterpairs::Vector{Vector{String}} = sliding([string(c) for c in justvowels], 2)
+	# Is one a diphthong?
+	possibledt = filter(letterpairs) do lp 
+		isdiphthong(join(lp))
+	end
+	# If not, no diphthong
+	if ( length(possibledt) == 0)
+		return false
+	else # maybe…
+		certaindt = filter(possibledt) do dt 
+			firsti::Int = [i for (i, c) in enumerate(s) if c == dt[1][1]][1]
+			secondi::Int = [i for (i, c) in enumerate(s) if c == dt[2][1]][1]
+			news::String = s[firsti:secondi]
+			isdiphthong(news)
+		end
+		length(certaindt) > 0
+	end
+
+end
+
+"Does a vector of beta-code strings contain a diphthong? (Must be contiguous characters!"
+function containsdiphthong(vs::Vector{String})::Bool
+	false
+end
+
+"Does a vector of AlignedChar objects contain a diphthong?"
+function containsdiphthong(vac::Vector{AlignedChar})::Bool
+	false
+end
 
 "Is a beta-code string-representation of a character a vowel (and only one vowel)?"
 function isavowel(s::String)::Bool
@@ -196,7 +237,7 @@ function isaconsonant(ac::AlignedChar)::Bool
 	isaconsonant(ac.charstring)	
 end
 
-"Is a beta-code string-representation of two characters a possibly a diphthong?"
+"Is a beta-code string-representation of TWO (and only two) characters a possibly a diphthong?"
 function isdiphthong(s::String)::Bool
 	dp = lowercase(s)
 	# diacriticals on first vowel mean no diphthong
@@ -212,10 +253,11 @@ function isdiphthong(s::String)::Bool
 	end	
 end
 
+
 "Is a Vector of beta-code string-representations of two characters a possibly a diphthong?"
 function isdiphthong(vs::Vector{String})::Bool
 	fs = filter(vs) do c
-		isavowel(lowercase(string(c)))
+		( (isavowel(lowercase(string(c)))) || (isaconsonant(lowercase(string(c)))) )
 	end
 	dp = join(fs) |> lowercase
 	isdiphthong(dp)
@@ -248,4 +290,62 @@ function getchartype(ac::AlignedChar)
 	elseif isaconsonant(ac) "consonant"
 	else "other"
 	end
+end
+
+"Does a BasicSyllable begin with a vowel?"
+function beginswithvowel(bs::BasicSyllable)
+	bs.chars[1] |> isavowel
+end
+
+"Is a character a 'colon', a punctuation mark that defines a phrase or clause?"
+function iscolon(ac::AlignedChar)::Bool
+	ac.type == "colon"
+end
+
+"Is there a word-break after this syllable?"
+function wordbreakafter(bs::BasicSyllable)::Bool
+	lastindex = last(bs.chars).charindex
+	nextindex = begin 
+		if (lastindex == length(bs.context))
+			lastindex
+		else
+			lastindex + 1
+		end
+	end
+
+	# If the last char of this syllable has `.terminator == true`… true
+	if (last(bs.chars).terminator == true) true
+	# If this syllable is the last of the line… true
+	elseif ( last(bs.chars).charindex == length(bs.context) ) true
+	# If the first char of the _next_ syllable has `.terminator == true`… true
+	elseif ( bs.context[nextindex].terminator == true ) true
+	# Else false
+	else false end
+
+end
+
+"Does a BasicSyllable end with a colon punctuation (period, comma, etc?)"
+function endswithcolon(bs::BasicSyllable)::Bool
+	lastindex = last(bs.chars).charindex
+	#Three possibilities…
+	# 1. There is punctuation right after the last char of the syllable.
+	next1index = begin
+		if ( (lastindex + 1) > length(bs.context) )
+			lastindex
+		else (lastindex + 1)
+		end
+	end
+	# 2. The next syllable begins with a consonant, with punctuation after that. This is a function of how we initially syllabify "closed" syllables
+	next2index = begin
+		if ( (lastindex + 2) > length(bs.context) )
+			next1index
+		else (lastindex + 2)
+		end
+	end
+
+	nextchar = bs.context[next1index]
+	next2char = bs.context[next2index]
+
+	( (iscolon(nextchar)) || (iscolon(next2char)) )
+
 end

@@ -1,7 +1,7 @@
 name = "MeterReader"
 uuid = "e4974282-f47c-4920-baad-a3ebf6911431"
 authors = ["Eumaeus <cwblackwell@gmail.com>"]
-version = "0.3.0"
+version = "0.3.3"
 
 [deps]
 BetaReader = "e5583720-4bc8-44d1-bd9a-9734450b0166"

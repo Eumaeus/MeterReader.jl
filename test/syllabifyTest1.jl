@@ -485,6 +485,24 @@ end
 	end
 
 	@test begin
+		l = iliadPoeticLines[4]
+		ac1 = l.chars[29] # "e"
+		ac2 = l.chars[32] # "u"
+		MeterReader.isdiphthong(ac1, ac2) == true
+	end
+
+	@test begin
+		l = iliadPoeticLines[4]
+		vac = l.chars[29:32] # "e…u"
+		MeterReader.isdiphthong(vac) == false
+	end
+
+	@test begin
+		s = "exu"
+		MeterReader.isdiphthong(s) == false
+	end
+
+	@test begin
 		l = iliadPoeticLines[2]
 		ac1 = l.chars[1] # "o"
 		ac2 = l.chars[2] # "u)"
@@ -497,6 +515,37 @@ end
 		vac = l.chars[1:2] # "ou)"
 		MeterReader.isdiphthong(vac)
 	end
+
+	@test begin
+		s = "aio"
+		MeterReader.containsdiphthong(s) == true
+	end
+
+	@test begin
+		s = "iao"
+		MeterReader.containsdiphthong(s) == false
+	end
+
+	@test begin
+		s = "a)/io"
+		MeterReader.containsdiphthong(s) == false
+	end
+
+	@test begin
+		s = "ai)\\o"
+		MeterReader.containsdiphthong(s) == true
+	end
+
+	@test begin
+		s = "oai)\\"
+		MeterReader.containsdiphthong(s) == true
+	end
+
+	@test begin
+		s = "oa)\\i"
+		MeterReader.containsdiphthong(s) == false
+	end
+
 
 	@test begin
 		s = "a"
@@ -689,6 +738,7 @@ end
 		vac::Vector{MeterReader.AlignedChar} = l.chars[1:2] # "Μῆ" 
 		!MeterReader.isclosedsyllable(vac) # test for this form of negation
 	end
+
 
 end 
 

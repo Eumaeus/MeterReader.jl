@@ -2,6 +2,11 @@
 
 	# Misc. Tests
 
+	@test begin
+		v = ["a", "b", "c"]
+		slidingv::Vector{Vector{String}} = MeterReader.sliding(v, 2) 
+		slidingv == [ ["a","b"], ["b","c"] ]
+	end
 
 	@test begin
 		s = "ἄλγε᾽"
