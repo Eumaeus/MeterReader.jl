@@ -10,6 +10,7 @@ include("Constants.jl")
 include("Utilities.jl")
 include("SyllabifyUtilities.jl")
 include("Syllabify.jl")
+include("Parse.jl")
 
 export split_and_retain
 export eachwithindex

@@ -108,6 +108,13 @@ function showsyllable(vas::Vector{AnnotatedSyllable}, unicode = true)
 	end
 end
 
+"The Strcture of a Metrical Foot"
+struct MetricalFoot
+	seq::Int
+	syllables::Vector{AnnotatedSyllable}
+	quantity::String
+end
+
 #= ******************* 
 	Constructors
    ******************* =#
