@@ -376,6 +376,7 @@ urn:cts:greekLit:tlg0012.tlg001.perseus_grc2:1.10#νοῦσον ἀνὰ στρ�
 	end 
 
 
+
 	# Test my 'nextsyll' code in evaluate()
 	@test begin
 		# quant_test_sylls::Vector{MeterReader.BasicSyllable}
@@ -453,7 +454,6 @@ urn:cts:greekLit:tlg0012.tlg001.perseus_grc2:1.10#νοῦσον ἀνὰ στρ�
 		MeterReader.beginswithvowel(nextsyll) == false
 	end
 
-	# Testing word-breaks and colons
 
 	# Setup Iliad 1.9
 		# Synapheia
@@ -470,6 +470,85 @@ urn:cts:greekLit:tlg0012.tlg001.perseus_grc2:1.10#νοῦσον ἀνὰ στρ�
 	test_sylls_8::Vector{MeterReader.BasicSyllable} = MeterReader.syllabify4poetry(test_synf_8)	
 	test_synf_2 = MeterReader.synapheia(iliadPoeticLines[2].chars)
 	test_sylls_2::Vector{MeterReader.BasicSyllable} = MeterReader.syllabify4poetry(test_synf_2)	
+
+
+
+	# Test Pretty-printing
+
+	@test begin 
+		tsi::Int = 12 
+		# Get an AnnotatedSyllable
+		as::MeterReader.AnnotatedSyllable = MeterReader.evaluate(test_sylls_2, tsi)
+		# Uncomment below
+		# println(MeterReader.show(as))
+		true
+	end 
+
+	@test begin 
+		tsi::Int = 11
+		# Get an AnnotatedSyllable
+		as::MeterReader.AnnotatedSyllable = MeterReader.evaluate(test_sylls_2, tsi)
+		# Uncomment below
+		# println(MeterReader.show(as))
+		true
+	end 
+
+	@test begin 
+		tsi::Int = 7
+		# Get an AnnotatedSyllable
+		as::MeterReader.AnnotatedSyllable = MeterReader.evaluate(quant_test_sylls, tsi)
+		# Uncomment below
+		# println(MeterReader.show(as))
+		true
+	end 
+
+	@test begin 
+		tsi::Vector{Int} = collect(1:3)
+		# Get an AnnotatedSyllable
+		vas::Vector{MeterReader.AnnotatedSyllable} = map( i -> MeterReader.evaluate(test_sylls_2, i), tsi)
+		# Uncomment below
+		# println(MeterReader.show(as))
+		true
+	end
+
+	@test begin 
+		tsi::Vector{Int} = collect(4:5)
+		# Get an AnnotatedSyllable
+		vas::Vector{MeterReader.AnnotatedSyllable} = map( i -> MeterReader.evaluate(test_sylls_2, i), tsi)
+		# Uncomment below
+		# println(MeterReader.show(as))
+		true
+	end
+
+	@test begin 
+		tsi::Vector{Int} = collect(6:8)
+		# Get an AnnotatedSyllable
+		vas::Vector{MeterReader.AnnotatedSyllable} = map( i -> MeterReader.evaluate(test_sylls_2, i), tsi)
+		# Uncomment below
+		# println(MeterReader.show(as))
+		true
+	end
+
+	@test begin 
+		tsi::Vector{Int} = collect(9:10)
+		# Get an AnnotatedSyllable
+		vas::Vector{MeterReader.AnnotatedSyllable} = map( i -> MeterReader.evaluate(test_sylls_2, i), tsi)
+		# Uncomment below
+		# println(MeterReader.show(as))
+		true
+	end
+
+	@test begin 
+		tsi::Vector{Int} = collect(11:13)
+		# Get an AnnotatedSyllable
+		vas::Vector{MeterReader.AnnotatedSyllable} = map( i -> MeterReader.evaluate(test_sylls_2, i), tsi)
+		# Uncomment below
+		# println(MeterReader.show(as))
+		true
+	end
+
+
+	# Test Flags
 
 	@test begin
 		index = 7 # 
@@ -535,7 +614,7 @@ urn:cts:greekLit:tlg0012.tlg001.perseus_grc2:1.10#νοῦσον ἀνὰ στρ�
 	@test begin 
 		l = iliadPoeticLines[7]
 		vac::MeterReader.AlignedChar = l.chars[43] # period
-		println(vac.charstring)
+		#println(vac.charstring)
 		MeterReader.iscolon(vac) == true
 	end
 

@@ -51,23 +51,23 @@ urn:cts:greekLit:tlg0012.tlg001.perseus_grc2:1.10#νοῦσον ἀνὰ στρ�
 		end
 	end	
 
-	# Testing word-breaks and colons
 
-	# Setup Iliad 1.9
+	# Setup some Iliad lines
 		# Synapheia
-	test_synf_9 = MeterReader.synapheia(iliadPoeticLines[9].chars)
-		# Syllabify (first cut)
-		# Λητοῦς καὶ Διὸς υἱός· ὃ γὰρ βασιλῆϊ χολωθεὶς
-		# Λη-τοῦς-καὶ-Δι-ὸ-ςυἱ-ό-ς·ὃ-γὰρ-βα-σι-λῆ-ϊ-χο-λω-θεὶς
-	test_sylls_9::Vector{MeterReader.BasicSyllable} = MeterReader.syllabify4poetry(test_synf_9)	
-		# Get the index of a test syllable
+	test_synf_1 = MeterReader.synapheia(iliadPoeticLines[1].chars)
+		# First-cut syllabify
+	test_sylls_1::Vector{MeterReader.BasicSyllable} = MeterReader.syllabify4poetry(test_synf_1)	
 
+	test_synf_2 = MeterReader.synapheia(iliadPoeticLines[2].chars)
+	test_sylls_2::Vector{MeterReader.BasicSyllable} = MeterReader.syllabify4poetry(test_synf_2)	
 	test_synf_7 = MeterReader.synapheia(iliadPoeticLines[7].chars)
 	test_sylls_7::Vector{MeterReader.BasicSyllable} = MeterReader.syllabify4poetry(test_synf_7)	
 	test_synf_8 = MeterReader.synapheia(iliadPoeticLines[8].chars)
 	test_sylls_8::Vector{MeterReader.BasicSyllable} = MeterReader.syllabify4poetry(test_synf_8)	
-	test_synf_2 = MeterReader.synapheia(iliadPoeticLines[2].chars)
-	test_sylls_2::Vector{MeterReader.BasicSyllable} = MeterReader.syllabify4poetry(test_synf_2)	
+	test_synf_9 = MeterReader.synapheia(iliadPoeticLines[9].chars)
+	test_sylls_9::Vector{MeterReader.BasicSyllable} = MeterReader.syllabify4poetry(test_synf_9)	
+
+	# Testing for colon, just to see if this is all working…
 
 	@test begin
 		index = 7 # 

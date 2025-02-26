@@ -95,13 +95,14 @@ const _HIATUS = [
 
 # Quantities: long, short, ambiguous
 const _QUANTITIES = Dict(
-	"long" => ("-", ""),
-	"short" => ("v", ""),
-	"ambiguous" => ("?", ""),
-	"error" => ("err", "err")
+	"long" => ("-", "—"),
+	"short" => ("v", "⏑"),
+	"ambiguous" => ("?", "⏓"),
+	"error" => ("err", "?"),
+	"caesura" => (":", "⁝")
 )
 
-# Reference ⏐ ⏑ ⏒ ⏓ ⏔ ⏕ ⏖
+# Reference ⏐ ⏑ ⏒ ⏓ ⏔ ⏕ ⏖ —
 
 
 # RULES 

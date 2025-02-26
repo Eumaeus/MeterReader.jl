@@ -34,7 +34,9 @@ To understand Greek epic poetry, it seems necessary to include the metrical scan
 - `PoeticLine`
 - `IndexedString` & categorized tokens
 - `AlignedChar`
-- 
+- `BasicSyllable`
+- `AnnotatedSyllable`
+- `PoeticFoot`
 
 Syllabify and initial quantifying.
 Parsing via non-deterministic automaton.

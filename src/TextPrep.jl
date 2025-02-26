@@ -77,6 +77,12 @@ struct AnnotatedSyllable
 	rules::Vector{String}
 end
 
+"A poetic foot. May be invalid as dactylic hexameter!"
+struct PoeticFoot
+	seq::Int
+	syllables::Vector{AnnotatedSyllable}
+end
+
 "Construct an AnnotatedSyllable without .rules"
 function AnnotatedSyllable(syllable::BasicSyllable, quantity::String, flags::Vector{String})
 	emptyrules::Vector{String} = []
@@ -91,8 +97,42 @@ function AnnotatedSyllable(syllable::BasicSyllable, quantity::String)
 end
 
 "Pretty-print BasicSyllable; just join the charstring values of each in .chars"
-function showsyllable(annsyll::AnnotatedSyllable)
-	sylsstring = map(bsc -> bsc.charstring, annsyll.syllable.chars) |> join
+function showsyllable(annsyll::AnnotatedSyllable)::String
+	charstring = map(bsc -> bsc.charstring, annsyll.syllable.chars) |> join |> BetaReader.betaToUnicode
+	caesura_after::Bool = "caesura_after" in annsyll.flags
+	quantstring = _QUANTITIES[annsyll.quantity][2]
+	paddedquant = begin
+		if (isclosedsyllable(annsyll.syllable)) 
+			repeat(" ", (length(charstring)- 2)) * quantstring * " "
+		else 
+			repeat(" ", (length(charstring)-1)) * quantstring
+		end
+	end
+	caesurastring = begin
+		if (caesura_after)
+			" $(_QUANTITIES["caesura"][2]) "
+		else
+			""
+		end
+	end
+
+	paddedquant * caesurastring * "\n" * charstring * caesurastring
+end
+
+function show(vas::Vector{AnnotatedSyllable})::String 
+
+	allsylls::Vector{String} = map(as -> show(as), vas)
+	splitsylls = map(vc -> split(vc, "\n"), allsylls)
+	allquants = map( ss -> ss[1], splitsylls)
+	alltext = map( ss -> ss[2], splitsylls)
+	return (join(allquants, "   ") * "\n" * join(alltext, " - ") )
+
+
+
+end
+
+function show(as::AnnotatedSyllable)::String
+	showsyllable(as)
 end
 
 "Pretty-print a Vector of BasicSyllables"
@@ -114,6 +154,7 @@ struct MetricalFoot
 	syllables::Vector{AnnotatedSyllable}
 	quantity::String
 end
+
 
 #= ******************* 
 	Constructors

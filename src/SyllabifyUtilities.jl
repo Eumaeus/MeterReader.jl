@@ -224,6 +224,13 @@ function isclosedsyllable(vac::Vector{AlignedChar})::Bool
 	isaconsonant(lc)
 end
 
+"Does a BasicSyllable represent a 'closed' syllable?"
+function isclosedsyllable(bs::BasicSyllable)::Bool
+	vac::Vector{AlignedChar} = bs.chars
+	lc::String = last(vac).charstring |> lowercase
+	isaconsonant(lc)
+end
+
 "Is a beta-code string-representation of a character a consonent?"
 function isaconsonant(s::String)::Bool
 	fs = filter(s) do c 

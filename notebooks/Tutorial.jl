@@ -59,6 +59,27 @@ md"""
 # ╔═╡ 8ff4a69c-a659-4aef-9880-111d79af5828
 MeterReader.sayhi()
 
+# ╔═╡ 7546b652-9202-407b-8daa-7eb436f734d7
+md"""
+### Get Some Text
+
+We will work with `PoeticLine` objects. Each has a citation (a CtsUrn) and a text, as a `String`.
+
+
+"""
+
+# ╔═╡ 47050662-8397-419b-92bd-36b3e993d5d1
+begin
+	urn = CitableText.CtsUrn("urn:cts:greekLit:tlg0012.tlg001.perseus_grc2:1.2")
+	text = "οὐλομένην, ἣ μυρί᾽ Ἀχαιοῖς ἄλγε᾽ ἔθηκε,"
+end
+
+# ╔═╡ ccff1817-f314-4efb-bb42-671a49c49c36
+md"""And we can construct our `MeterReader.PoeticLine` object:"""
+
+# ╔═╡ 7184a27f-ec42-47bf-a9bb-1abc78a37ab1
+pl = MeterReader.makePoeticLine( urn, text )
+
 # ╔═╡ 3ad55654-ef28-415f-8c6f-d7c17a5d1399
 md"""
 ## Playground
@@ -66,12 +87,25 @@ md"""
 Use this area to experiment and test.
 """
 
-# ╔═╡ f9951389-c9da-4a4e-9327-7fe24725b2b0
+# ╔═╡ 802f9ac8-d67e-4906-92fa-63ea626dfb79
+md"""
+#### Sliding, techniques
+"""
 
+# ╔═╡ 12f1e8bb-2764-446b-a8be-8f998876aa4e
+
+
+# ╔═╡ f9951389-c9da-4a4e-9327-7fe24725b2b0
 begin
 	v = ["a", "b", "c", "d", "e"]
-	slidingv = collect( Iterators.partition(v, 2) )
+	sliding_windows = slidingv = collect( Iterators.partition(v, 2) )
 end
+
+# ╔═╡ c348e5b3-5e73-4500-930e-d38325f02ab4
+sliding_windows[1]
+
+# ╔═╡ 6305be43-f842-45cb-8dd0-338624601195
+md"""Or we can write a function that does it like Scala."""
 
 # ╔═╡ 0d0402b1-3822-4a6a-ba00-1870179d2eb5
 "Implement `sliding()` like in Scala"
@@ -98,7 +132,22 @@ push!(v, "f")
 xx = ["possible_ellision", "possible_synizesis"]
 
 # ╔═╡ a3a8aee8-352f-439f-b347-862a54cc9e2d
-occursin("a", "xyz")
+
+
+# ╔═╡ cafa3450-895f-4c4a-a082-0eb8fb3a4120
+sss = "string"
+
+# ╔═╡ 0a3116a9-256b-4ab8-8159-b6fa813a2947
+const _QUANTITIES = Dict(
+	"long" => ("-", "—"),
+	"short" => ("v", "⏑"),
+	"ambiguous" => ("?", "⏓"),
+	"error" => ("err", "?"),
+	"caesura" => (":", ":")
+)
+
+# ╔═╡ 1a27ccf5-035c-42b6-ac56-cdead7d123e1
+_QUANTITIES["long"][2]
 
 # ╔═╡ Cell order:
 # ╟─e62b66dc-148c-4308-b60b-bc247e6f0c4b
@@ -106,8 +155,16 @@ occursin("a", "xyz")
 # ╠═65f585e0-f011-11ef-04ad-23d3a38f9e69
 # ╟─d0b2dfce-b64b-4b52-be63-6dc6c8462657
 # ╠═8ff4a69c-a659-4aef-9880-111d79af5828
+# ╟─7546b652-9202-407b-8daa-7eb436f734d7
+# ╠═47050662-8397-419b-92bd-36b3e993d5d1
+# ╟─ccff1817-f314-4efb-bb42-671a49c49c36
+# ╠═7184a27f-ec42-47bf-a9bb-1abc78a37ab1
 # ╟─3ad55654-ef28-415f-8c6f-d7c17a5d1399
+# ╟─802f9ac8-d67e-4906-92fa-63ea626dfb79
+# ╠═12f1e8bb-2764-446b-a8be-8f998876aa4e
 # ╠═f9951389-c9da-4a4e-9327-7fe24725b2b0
+# ╠═c348e5b3-5e73-4500-930e-d38325f02ab4
+# ╠═6305be43-f842-45cb-8dd0-338624601195
 # ╠═0d0402b1-3822-4a6a-ba00-1870179d2eb5
 # ╠═854130f5-6e88-4bc1-91f4-c6ab49147082
 # ╠═340eba5b-e3a7-40e7-9817-391ab30f0d4a
@@ -116,3 +173,6 @@ occursin("a", "xyz")
 # ╠═6cfd3542-6b12-40e5-9f29-b5bb5ba4405a
 # ╠═565df2d9-629b-4acd-9320-44e5f512c655
 # ╠═a3a8aee8-352f-439f-b347-862a54cc9e2d
+# ╠═cafa3450-895f-4c4a-a082-0eb8fb3a4120
+# ╠═0a3116a9-256b-4ab8-8159-b6fa813a2947
+# ╠═1a27ccf5-035c-42b6-ac56-cdead7d123e1
