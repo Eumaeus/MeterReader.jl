@@ -78,10 +78,29 @@ struct AnnotatedSyllable
 end
 
 "A poetic foot. May be invalid as dactylic hexameter!"
-struct PoeticFoot
-	seq::Int
-	syllables::Vector{AnnotatedSyllable}
+struct MetricalFoot
+	 seq::Int
+    syllables::Vector{AnnotatedSyllable}
+    pattern::String # values in _QUANTITIES
+    rules::Vector{String}
+    weight::Int  # Cumulative weight of decisions for this foot
 end
+
+function MetricalFoot(
+	 seq::Int,
+    syllables::Vector{AnnotatedSyllable})
+
+	MetricalFoot(
+		seq,
+		syllables,
+		"ambiguous",
+		Vector{String}(),
+		1
+	)
+
+end
+
+
 
 "Construct an AnnotatedSyllable without .rules"
 function AnnotatedSyllable(syllable::BasicSyllable, quantity::String, flags::Vector{String})
@@ -96,64 +115,8 @@ function AnnotatedSyllable(syllable::BasicSyllable, quantity::String)
 	AnnotatedSyllable(syllable, quantity, emptyflags, emptyrules)
 end
 
-"Pretty-print BasicSyllable; just join the charstring values of each in .chars"
-function showsyllable(annsyll::AnnotatedSyllable)::String
-	charstring = map(bsc -> bsc.charstring, annsyll.syllable.chars) |> join |> BetaReader.betaToUnicode
-	caesura_after::Bool = "caesura_after" in annsyll.flags
-	quantstring = _QUANTITIES[annsyll.quantity][2]
-	paddedquant = begin
-		if (isclosedsyllable(annsyll.syllable)) 
-			repeat(" ", (length(charstring)- 2)) * quantstring * " "
-		else 
-			repeat(" ", (length(charstring)-1)) * quantstring
-		end
-	end
-	caesurastring = begin
-		if (caesura_after)
-			" $(_QUANTITIES["caesura"][2]) "
-		else
-			""
-		end
-	end
-
-	paddedquant * caesurastring * "\n" * charstring * caesurastring
-end
-
-function show(vas::Vector{AnnotatedSyllable})::String 
-
-	allsylls::Vector{String} = map(as -> show(as), vas)
-	splitsylls = map(vc -> split(vc, "\n"), allsylls)
-	allquants = map( ss -> ss[1], splitsylls)
-	alltext = map( ss -> ss[2], splitsylls)
-	return (join(allquants, "   ") * "\n" * join(alltext, " - ") )
 
 
-
-end
-
-function show(as::AnnotatedSyllable)::String
-	showsyllable(as)
-end
-
-"Pretty-print a Vector of BasicSyllables"
-function showsyllable(vas::Vector{AnnotatedSyllable}, unicode = true)
-	stringvec::Vector{String} = map(vas) do as
-		showsyllable(as)
-	end
-
-	if (unicode)
-		BetaReader.betaToUnicode(join(stringvec, " - "))
-	else
-		join(stringvec, " - ")
-	end
-end
-
-"The Strcture of a Metrical Foot"
-struct MetricalFoot
-	seq::Int
-	syllables::Vector{AnnotatedSyllable}
-	quantity::String
-end
 
 
 #= ******************* 

@@ -26,7 +26,7 @@ end
 md"""
 # MeterReader.jl
 
-[![version 0.3.2](https://img.shields.io/badge/version-0.3-blue.svg)](https://shields.io/) [![175 tests](https://img.shields.io/badge/tests-175-teal.svg)](https://shields.io/) 
+[![version 0.3.2](https://img.shields.io/badge/version-0.3-blue.svg)](https://shields.io/) [![230 tests](https://img.shields.io/badge/tests-230-teal.svg)](https://shields.io/) 
 
 [GitHub](https://github.com/Eumaeus/MeterReader.jl): <https://github.com/Eumaeus/MeterReader.jl>
 
@@ -149,6 +149,30 @@ const _QUANTITIES = Dict(
 # ╔═╡ 1a27ccf5-035c-42b6-ac56-cdead7d123e1
 _QUANTITIES["long"][2]
 
+# ╔═╡ 7eafbca3-9867-473b-bcc4-28a3ba425b12
+begin
+	x::Int = 7
+	y::Int = floor(x / 2)
+end
+
+# ╔═╡ a4ab0816-df2d-47ce-afc4-d80ca6af10a9
+8 % 2
+
+# ╔═╡ 987f132d-d3f3-4b3f-811c-e7d5412b25b3
+repeat("x", 2)
+
+# ╔═╡ 79cc7cd5-42b3-4e63-a80a-0410717376d5
+xxx::Int = 8/2
+
+# ╔═╡ d205f472-c8b2-4c12-b659-f7a2b290c79d
+floor(7/2) |> typeof
+
+# ╔═╡ 87bef7ee-8525-4b21-af78-11e42aa02498
+myvec = [1, 2, 3, 4]
+
+# ╔═╡ 4296616a-cf13-4497-8359-fa0b723829be
+myvec[end]
+
 # ╔═╡ Cell order:
 # ╟─e62b66dc-148c-4308-b60b-bc247e6f0c4b
 # ╟─bcd8bdcc-41c3-4e2d-99f1-800b9bd6af20
@@ -176,3 +200,10 @@ _QUANTITIES["long"][2]
 # ╠═cafa3450-895f-4c4a-a082-0eb8fb3a4120
 # ╠═0a3116a9-256b-4ab8-8159-b6fa813a2947
 # ╠═1a27ccf5-035c-42b6-ac56-cdead7d123e1
+# ╠═7eafbca3-9867-473b-bcc4-28a3ba425b12
+# ╟─a4ab0816-df2d-47ce-afc4-d80ca6af10a9
+# ╠═987f132d-d3f3-4b3f-811c-e7d5412b25b3
+# ╠═79cc7cd5-42b3-4e63-a80a-0410717376d5
+# ╠═d205f472-c8b2-4c12-b659-f7a2b290c79d
+# ╠═87bef7ee-8525-4b21-af78-11e42aa02498
+# ╠═4296616a-cf13-4497-8359-fa0b723829be

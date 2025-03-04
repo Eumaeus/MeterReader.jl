@@ -212,6 +212,29 @@ function vowelquantity(vac::Vector{AlignedChar})::String
 	vowelquantity(s)
 end
 
+"Does a beta-code string representation of a syllable have a circumflex?"
+function containscircumflex(s::String)
+	occursin("=", s)
+end
+
+"Does an AlignedChar have a circumflex?"
+function containscircumflex(ac::AlignedChar)
+	containscircumflex(ac.charstring)
+end
+
+"Does a Vector{AlignedChar} have a circumflex?"
+function containscircumflex(vac::Vector{AlignedChar})
+	cc::String = map(ac -> ac.charstring, vac) |> join
+	containscircumflex(cc)
+end
+
+"Does a BasicSyllable have a circumflex?"
+function containscircumflex(bs::BasicSyllable)
+	cc::Vector{AlignedChar} = bs.chars
+	containscircumflex(cc)
+end
+
+
 "Is a beta-code string representation of a syllable 'closed'?"
 function isclosedsyllable(s::String)::Bool
 	lc::String = last(s) |> string |> lowercase

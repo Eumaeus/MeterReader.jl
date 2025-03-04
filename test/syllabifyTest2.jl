@@ -225,8 +225,24 @@ urn:cts:greekLit:tlg0012.tlg001.perseus_grc2:1.10#νοῦσον ἀνὰ στρ�
 	quant_test_synf = MeterReader.synapheia(iliadPoeticLines[1].chars)
 		# Syllabify (first cut)
 	quant_test_sylls::Vector{MeterReader.BasicSyllable} = MeterReader.syllabify4poetry(quant_test_synf)	
-		# Get the index of a test syllable
-		
+	
+	
+	@test begin 
+		tsi::Int = 1 # does have circumflex!
+		# Get an AnnotatedSyllable
+		as::MeterReader.AnnotatedSyllable = MeterReader.evaluate(quant_test_sylls, tsi)
+		# Test for circumflex
+		MeterReader.containscircumflex(as.syllable) == true
+	end
+
+	@test begin 
+		tsi::Int = 2 # does not have circumflex!
+		# Get an AnnotatedSyllable
+		as::MeterReader.AnnotatedSyllable = MeterReader.evaluate(quant_test_sylls, tsi)
+		# Test for circumflex
+		MeterReader.containscircumflex(as.syllable) == false
+	end
+
 
 	@test begin 
 		tsi::Int = 1
@@ -544,6 +560,68 @@ urn:cts:greekLit:tlg0012.tlg001.perseus_grc2:1.10#νοῦσον ἀνὰ στρ�
 		vas::Vector{MeterReader.AnnotatedSyllable} = map( i -> MeterReader.evaluate(test_sylls_2, i), tsi)
 		# Uncomment below
 		# println(MeterReader.show(as))
+		true
+	end
+
+	@test begin 
+		tsi::Vector{Int} = collect(1:3)
+		seq::Int = 1
+		# Get an AnnotatedSyllable
+		vas::Vector{MeterReader.AnnotatedSyllable} = map( i -> MeterReader.evaluate(test_sylls_2, i), tsi)
+
+		pf::MeterReader.MetricalFoot = MeterReader.MetricalFoot(seq, vas)	
+		# Uncomment below
+		#println(MeterReader.show(pf))
+		true
+	end
+
+	@test begin 
+		tsi::Vector{Int} = collect(4:5)
+		seq::Int = 2
+		# Get an AnnotatedSyllable
+		vas::Vector{MeterReader.AnnotatedSyllable} = map( i -> MeterReader.evaluate(test_sylls_2, i), tsi)
+
+		pf::MeterReader.MetricalFoot = MeterReader.MetricalFoot(seq, vas)	
+		# Uncomment below
+		#println(MeterReader.show(pf))
+		true
+	end
+
+	@test begin 
+		tsi::Vector{Int} = collect(6:8)
+		seq::Int = 3
+		# Get an AnnotatedSyllable
+		vas::Vector{MeterReader.AnnotatedSyllable} = map( i -> MeterReader.evaluate(test_sylls_2, i), tsi)
+
+		pf::MeterReader.MetricalFoot = MeterReader.MetricalFoot(seq, vas)	
+		# Uncomment below
+		#println(MeterReader.show(pf))
+		true
+	end
+
+	@test begin 
+		tsi1::Vector{Int} = collect(1:3)
+		seq1::Int = 1
+		vas1::Vector{MeterReader.AnnotatedSyllable} = map( i -> MeterReader.evaluate(test_sylls_2, i), tsi1)
+		pf1::MeterReader.MetricalFoot = MeterReader.MetricalFoot(seq1, vas1)	
+
+		tsi2::Vector{Int} = collect(4:5)
+		seq2::Int = 2
+		vas2::Vector{MeterReader.AnnotatedSyllable} = map( i -> MeterReader.evaluate(test_sylls_2, i), tsi2)
+		pf2::MeterReader.MetricalFoot = MeterReader.MetricalFoot(seq2, vas2)	
+
+		tsi3::Vector{Int} = collect(6:8)
+		seq3::Int = 3
+		vas3::Vector{MeterReader.AnnotatedSyllable} = map( i -> MeterReader.evaluate(test_sylls_2, i), tsi3)
+		pf3::MeterReader.MetricalFoot = MeterReader.MetricalFoot(seq3, vas3)	
+
+		vpf::Vector{MeterReader.MetricalFoot} = [
+			pf1,
+			pf2,
+			pf3
+		]
+		# Uncomment below
+		println("\n" * MeterReader.show(vpf) * "\n")
 		true
 	end
 

@@ -6,6 +6,7 @@ using CitableText
 using CitableCorpus
 
 include("TextPrep.jl")
+include("PrettyPrint.jl")
 include("Constants.jl")
 include("Utilities.jl")
 include("SyllabifyUtilities.jl")

@@ -150,6 +150,7 @@ function evaluate(vbs::Vector{BasicSyllable}, index::Int)::AnnotatedSyllable
 	quantity::String = begin
 		# Is it obviously short and un-closed? Mark short
 		if ( (vowelquantity(cc) == "short") && (isclosedsyllable(cc) == false) ) 
+			push!(rules, "short_vowel")
 			# Is it followed by a vowel or diphthong? If so flag for possible synizesis
 			if ( beginswithvowel(nextsyll) )
 				push!(flags, "possible_ellision")
@@ -160,22 +161,29 @@ function evaluate(vbs::Vector{BasicSyllable}, index::Int)::AnnotatedSyllable
 
 		# Is is inherently long?
 		elseif ( vowelquantity(cc) == "long" )
+			push!(rules, "long_vowel")
 			# Is it un-closed and followed by a vowel? If so, flag for correption and synizesis
 			if ( (isclosedsyllable(cc) == false) && ( beginswithvowel(nextsyll)) )
 				push!(flags, "possible_synizesis")
 				push!(flags, "possible_correption")
+				push!(rules, "closed_syllable")
 			end
 
 			"long"
 
 		# Is it a diphthong? Mark long but flag for possible hiatus
 		elseif ( isdiphthong(cc) )
+			push!(rules, "diphthong")
 			# Is it un-closed and followed by a vowel? If so, flag for correption and synizesis
 			if ( (isclosedsyllable(cc) == false) && ( beginswithvowel(nextsyll)) )
 				push!(flags, "possible_synizesis")
 				push!(flags, "possible_correption")
 			end			
-			push!(flags, "possible_hiatus")
+			if ( containscircumflex(cc) == false )
+				push!(flags, "possible_hiatus")
+			else
+				push!(rules,"circumflex_on_diphthong")
+			end
 
 			"long"
 
@@ -190,7 +198,12 @@ function evaluate(vbs::Vector{BasicSyllable}, index::Int)::AnnotatedSyllable
 				push!(flags, "possible_synizesis")
 			end
 
-			"ambiguous"
+			if ( containscircumflex(cc) )
+				push!(rules, "circumflex")
+				"long"
+			else
+				"ambiguous"
+			end
 
 		else
 			"error"

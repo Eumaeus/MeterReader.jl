@@ -546,6 +546,35 @@ end
 		MeterReader.containsdiphthong(s) == false
 	end
 
+	@test begin  
+		s = "oi="
+		MeterReader.containscircumflex(s) == true
+	end
+
+	@test begin  
+		l = iliadPoeticLines[1]
+		vac = l.chars[2] # "Μῆ"
+		MeterReader.containscircumflex(vac) == true
+	end
+
+	@test begin  
+		l = iliadPoeticLines[1]
+		vac = l.chars[1:2] # "Μῆ"
+		MeterReader.containscircumflex(vac) == true
+	end
+
+	@test begin  
+		l = iliadPoeticLines[2]
+		vac = l.chars[1:2] # no circumflex
+		MeterReader.containscircumflex(vac) == false
+	end
+
+	@test begin  
+		l = iliadPoeticLines[2]
+		vac = l.chars[2:3] # no circumflex
+		MeterReader.containscircumflex(vac) == false
+	end
+
 
 	@test begin
 		s = "a"

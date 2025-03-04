@@ -43,4 +43,12 @@ Parsing via non-deterministic automaton.
 
 I got a lot of great ideas, particulary the ranking of candidate parsings, from the brilliant and clearly documented Python code by [Hope Ranker](https://github.com/epilanthanomai), generously [published openly](https://github.com/epilanthanomai/hexameter).
 
+## Grok
+
+https://x.com/i/grok/share/rFhVNIGMeZmLkdRQMNDfGyg2F
+
+https://x.com/i/grok/share/WxJDUGsv9tcmJqU7E2D3KFfzu
+
+https://x.com/i/grok/share/tiS6JjhYrebzCewyQDsETSnIl
+
 
