@@ -120,22 +120,32 @@ const _FOOTLABLE = Dict(
 # Reference ⏐ ⏑ ⏒ ⏓ ⏔ ⏕ ⏖ —
 
 
-# RULES 
-const _FLAGS  =  Dict(
-	"possible_ellision" => 0,
-	"possible_correption" => 0,
-	"possible_hiatus" => 0,
-	"possible_synizesis" => 0,
-	"ambiguous_vowel" => 0,
-	"wordbreak_after" => 0,
-	"caesurea_after" => 0,
-	"colon_after" => 0,
-	"closed_syllable" => 0,
-	"trochaic_sixth" => 0,
-	"spondaic_sixth" => 0
-)
+# FLAGS (which might determine the final analysis) 
 
-# RULES 
+const _LONG_FLAGS = [
+	"possible_synizesis",
+	"ambiguous_vowel",
+	"closed_syllable",
+	"diphthong",
+]
+
+const _SHORT_FLAGS = [
+	"possible_correption",
+	"possible_hiatus",
+]
+
+const _MISC_FLAGS  =  [
+	"possible_ellision",
+	"wordbreak_after",
+	"caesurea_after",
+	"colon_after",
+	"trochaic_sixth",
+	"spondaic_sixth",
+]
+
+const _FLAGS = union(_LONG_FLAGS, _SHORT_FLAGS, _MISC_FLAGS)
+
+# RULES (which apply to the final analysis)
 const _RULES  =  Dict(
 	"long_vowel" => 0,
 	"short_vowel" => 0,

@@ -1,6 +1,6 @@
 # MeterReader.jl
 
-[![version 0.4.0](https://img.shields.io/badge/version-0.4-blue.svg)](https://shields.io/) [![230 tests](https://img.shields.io/badge/tests-230-teal.svg)](https://shields.io/)
+[![version 0.4.1](https://img.shields.io/badge/version-0.4-blue.svg)](https://shields.io/) [![234 tests](https://img.shields.io/badge/tests-234-teal.svg)](https://shields.io/)
 
 A [Julia](https://julialang.org) library and Pluto notebooks for working with Ancient Greek Dactylic Hexameter, using the [CITE Architecture](https://github.com/cite-architecture) to maintain alignment between analysis and the original text.
 
@@ -16,7 +16,7 @@ A [Julia](https://julialang.org) library and Pluto notebooks for working with An
 | Synaphoreia of tokens in poetic line | **tested** |
 | Basic poetic syllabification | **tested** |
 | Quantification of syllables | **tested** |
-| Identification of edge cases | partially tested |
+| Identification of edge cases | in progress  |
 | Parsing | in progress |
 | Evaulation of candidates | in progress |
 | Serialization of parsed poetic lines | partially tested |

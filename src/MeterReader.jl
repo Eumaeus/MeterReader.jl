@@ -16,5 +16,7 @@ include("Parse.jl")
 export split_and_retain
 export eachwithindex
 export PoeticLine
+export AnnotatedSyllable
+export prepare_to_parse
 
 end # module

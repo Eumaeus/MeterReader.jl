@@ -2,11 +2,13 @@
 
 	testLineStrings = [
 	# spondaic line
-	"urn:cts:eumaeus:testgroup.testwork.ed:normal1#βη γω, δη θω, κη λη, μη νη, πη σε τε, χη βη",
+	"urn:cts:eumaeus:testgroup.testwork.ed:spondaic#βη γω, δη θω, κη λω, μη νω, πη σω, χη βη",
 	# dactylic line
-	"urn:cts:eumaeus:testgroup.testwork.ed:normal1#βη γε γο, γη δε δο, θη κη, λη με νο, πη πε πο, τη τω",
+	"urn:cts:eumaeus:testgroup.testwork.ed:normal2#βη γε γο, γη δε δο, θη κη, λη με νο, πη πε πο, τη τε το",
+	# like Iliad 1.1
+	"urn:cts:eumaeus:testgroup.testwork.ed:normal3#βηγε γογηδε δοθη κηλημενοπη πεποτητω",
 	# synizesis 1
-	"urn:cts:eumaeus:testgroup.testwork.ed:syniz1#βη γη, δε ε κη, λη μη, νη πη, πω σε τε, χη βη",
+	"urn:cts:eumaeus:testgroup.testwork.ed:syniz4#βη γη, δε ε κη, λη μη, νη πη, πω σε τε, χη βη",
 	# synizesis 2
 	"urn:cts:eumaeus:testgroup.testwork.ed:syniz2#βε ο γη, δη θη, κη λη, μη νη, πη σε τε, χη βη",
 	# two dactyls
@@ -55,6 +57,106 @@
 		syll = vbs[index]
 		MeterReader.endswithcolon(syll) == true
 	end broken = false
+
+	# Example of showing some feet…
+
+	@test begin 
+		# Get a AnnotatedSyllables for the fake Iliad 1.1 line
+		vas::Vector{MeterReader.AnnotatedSyllable} = map( eachindex(test_sylls_3) ) do i 
+			MeterReader.evaluate(test_sylls_3, i)
+		end 
+
+		# Make feet: This will be handled by function parse_dactylic_hexameter() in Parse.jl
+		sylls_for_feet::Vector{UnitRange{Int64}} = [
+			1:3,
+			4:6,
+			7:8,
+			9:11,
+			12:14,
+			15:16
+		]
+		six_feet::Vector{MeterReader.MetricalFoot} = map( eachindex(sylls_for_feet)) do i
+			sylls::Vector{MeterReader.AnnotatedSyllable} = map( collect(sylls_for_feet[i]) ) do syll 
+				vas[syll]	
+			end
+			MeterReader.MetricalFoot(i, sylls)
+		end
+
+		# Display
+		println(MeterReader.show(six_feet))
+		true
+	end
+
+	# Test basic workflow up to the parsing step…
+	@test begin 
+
+		# Get a line of poetry as a String, urn#text
+		test_line_string::String = testLineStrings[1]
+
+		# Make it a CitablePassage object
+		test_citable_passage::CitablePassage = MeterReader.citablePassage(test_line_string)
+
+		# Make it a PoeticLine
+		test_poetic_line::MeterReader.PoeticLine = MeterReader.makePoeticLine(test_citable_passage)
+
+		# Synapheia: Run the characters together without punctuation or spaces
+		test_synf::MeterReader.Synapheia = MeterReader.synapheia(test_poetic_line.chars)
+
+		# Do a first-cut syllabification into a Vector{BasicSyllable}
+		test_sylls::Vector{MeterReader.BasicSyllable} = MeterReader.syllabify4poetry(test_synf)
+
+		# Do a first-cut analysis for quantity and flags
+		test_vas::Vector{MeterReader.AnnotatedSyllable} = map( eachindex(test_sylls) ) do i 
+			MeterReader.evaluate(test_sylls, i)
+		end 
+
+		true	
+	end
+
+	# The above is a lot of steps!! We need one function. Let's test it.
+	@test begin 
+		test_line_string::String = testLineStrings[1]
+		test_sylls::Vector{MeterReader.AnnotatedSyllable} = MeterReader.prepare_to_parse(test_line_string)
+		true
+	end
+
+	# Do we get the same thing?
+	@test begin 
+		# Get a line of poetry as a String, urn#text
+		test_line_string::String = testLineStrings[1]
+
+		# Make it a CitablePassage object
+		test_citable_passage::CitablePassage = MeterReader.citablePassage(test_line_string)
+
+		# Make it a PoeticLine
+		test_poetic_line::MeterReader.PoeticLine = MeterReader.makePoeticLine(test_citable_passage)
+
+		# Synapheia: Run the characters together without punctuation or spaces
+		test_synf::MeterReader.Synapheia = MeterReader.synapheia(test_poetic_line.chars)
+
+		# Do a first-cut syllabification into a Vector{BasicSyllable}
+		test_sylls::Vector{MeterReader.BasicSyllable} = MeterReader.syllabify4poetry(test_synf)
+
+		# Do a first-cut analysis for quantity and flags
+		evaluate_the_hard_way::Vector{MeterReader.AnnotatedSyllable} = map( eachindex(test_sylls) ) do i 
+			MeterReader.evaluate(test_sylls, i)
+		end 
+
+		# Use our function to do it the easy way
+		evaluate_the_easy_way::Vector{MeterReader.AnnotatedSyllable} = MeterReader.prepare_to_parse(test_line_string)
+
+		evaluate_the_hard_way === evaluate_the_hard_way
+
+	end
+
+	@test begin 
+		test_line_string::String = testLineStrings[1]
+		test_line::Vector{MeterReader.AnnotatedSyllable} = MeterReader.prepare_to_parse(test_line_string)
+
+		results = MeterReader.preprocess_quantities(test_line)
+		true
+
+	end
 
 	
 

@@ -324,8 +324,14 @@ end
 
 "Does a BasicSyllable begin with a vowel?"
 function beginswithvowel(bs::BasicSyllable)
-	bs.chars[1] |> isavowel
+		bs.chars[1] |> isavowel
 end
+
+"Safety."
+function beginswithvowel(n::Nothing)
+		false
+end
+
 
 "Is a character a 'colon', a punctuation mark that defines a phrase or clause?"
 function iscolon(ac::AlignedChar)::Bool

@@ -100,6 +100,11 @@ function MetricalFoot(
 
 end
 
+"The end result of all this. This should, with the proper functions to keep things straight, let us align multiple valid metrical parsings with word-tokens, punctuation, sepators, and individual characters of the base text, all citable by URN."
+struct ParsedPoeticLine
+	poeticline::PoeticLine
+	metricalparsings::Vector{Vector{MetricalFoot}}
+end
 
 
 "Construct an AnnotatedSyllable without .rules"

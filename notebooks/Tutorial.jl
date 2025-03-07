@@ -17,6 +17,7 @@ begin
 	using Base.Iterators: product
 	using BetaReader
 	using CitableText
+	using CitableCorpus
 	using MeterReader
 
 	
@@ -26,7 +27,7 @@ end
 md"""
 # MeterReader.jl
 
-[![version 0.3.2](https://img.shields.io/badge/version-0.3-blue.svg)](https://shields.io/) [![230 tests](https://img.shields.io/badge/tests-230-teal.svg)](https://shields.io/) 
+[![version 0.4.1](https://img.shields.io/badge/version-0.4-blue.svg)](https://shields.io/) [![234 tests](https://img.shields.io/badge/tests-234-teal.svg)](https://shields.io/) 
 
 [GitHub](https://github.com/Eumaeus/MeterReader.jl): <https://github.com/Eumaeus/MeterReader.jl>
 
@@ -61,24 +62,61 @@ MeterReader.sayhi()
 
 # ╔═╡ 7546b652-9202-407b-8daa-7eb436f734d7
 md"""
-### Get Some Text
+### Get One Line of Poetry
 
-We will work with `PoeticLine` objects. Each has a citation (a CtsUrn) and a text, as a `String`.
+We can start from plain-test Strings, or from CitablePassage objects (a part of the CITE Architecture library CitableCorpus). 
+
+A CitablePassage consists of a **citation**, in the form of a CTS URN, and some **text**, as a String.
+
+Let's start with a String, and turn it into a CitablePassage. We'll use *Iliad* 1.2.
 
 
 """
 
-# ╔═╡ 47050662-8397-419b-92bd-36b3e993d5d1
-begin
-	urn = CitableText.CtsUrn("urn:cts:greekLit:tlg0012.tlg001.perseus_grc2:1.2")
-	text = "οὐλομένην, ἣ μυρί᾽ Ἀχαιοῖς ἄλγε᾽ ἔθηκε,"
+# ╔═╡ 2a16661b-54b2-4cbb-9114-29714b1e7d50
+one_line::String = "urn:cts:greekLit:tlg0012.tlg001.perseus_grc2:1.2#οὐλομένην, ἣ μυρί᾽ Ἀχαιοῖς ἄλγε᾽ ἔθηκε,"
+
+# ╔═╡ 6bfe2b42-08e8-4556-b245-30df1f019203
+md"""The string `one_line` has a URN and some poetry, separated by a `#` delimiter. From this String, we can make a CitablePassage."""
+
+# ╔═╡ 92baff16-ab4f-424b-9afd-3fe6813ee8c8
+one_citable_object::CitableCorpus.CitablePassage = begin
+	
+	# Get the URN-string from before the '#' delimiter
+	urnstring::String = split(one_line, "#")[1]
+	# Turn it into a CtsUrn object
+	urn::CtsUrn = CitableText.CtsUrn(urnstring)
+	# Get the text of the poetic line from after the '#' delimiter
+	mytext::String = split(one_line, "#")[2]
+	# Use these to make a CitablePassage
+	CitableCorpus.CitablePassage(urn, mytext)
 end
 
+# ╔═╡ 47050662-8397-419b-92bd-36b3e993d5d1
+md"""
+### Prepare for Parsing
+
+A lot of things have to happen before we can parse this line of poetry. 
+
+We could just work with a string-version of the text, but we would lose the ability to relate syllables, quantity, feet, dactyls, spondess, etc. to the characters and words of the original line. 
+
+The library takes care of all of this, with the function `prepare_to_parsing(cp::CitablePassage)` in the file `Parse.jl`.
+
+"""
+
 # ╔═╡ ccff1817-f314-4efb-bb42-671a49c49c36
-md"""And we can construct our `MeterReader.PoeticLine` object:"""
+md"""
+
+#### Our Starting Point for Parsing
+
+We aren't parsing a String, but a `Vector{AnnotatedSyllable}`.
+
+These are initially defined before parsing, and modified as we parse for meter.
+
+"""
 
 # ╔═╡ 7184a27f-ec42-47bf-a9bb-1abc78a37ab1
-pl = MeterReader.makePoeticLine( urn, text )
+annotated_syllables::Vector{MeterReader.AnnotatedSyllable} = MeterReader.prepare_to_parse(one_citable_object)
 
 # ╔═╡ 3ad55654-ef28-415f-8c6f-d7c17a5d1399
 md"""
@@ -171,7 +209,19 @@ floor(7/2) |> typeof
 myvec = [1, 2, 3, 4]
 
 # ╔═╡ 4296616a-cf13-4497-8359-fa0b723829be
-myvec[end]
+map( eachindex(myvec) ) do i
+	println(myvec[i])
+	myvec[i]
+end
+
+# ╔═╡ 4528b3c2-aacb-4436-aeae-9adc536e6665
+v1 = [1,2,3,4]
+
+# ╔═╡ 14c905f5-4f71-4a9a-9f93-7ed9e4f40585
+v2 = [5,6,7,8]
+
+# ╔═╡ aa8cdd28-502f-42e6-bc1b-c6259c7efabc
+union(v1, v2)
 
 # ╔═╡ Cell order:
 # ╟─e62b66dc-148c-4308-b60b-bc247e6f0c4b
@@ -180,7 +230,10 @@ myvec[end]
 # ╟─d0b2dfce-b64b-4b52-be63-6dc6c8462657
 # ╠═8ff4a69c-a659-4aef-9880-111d79af5828
 # ╟─7546b652-9202-407b-8daa-7eb436f734d7
-# ╠═47050662-8397-419b-92bd-36b3e993d5d1
+# ╠═2a16661b-54b2-4cbb-9114-29714b1e7d50
+# ╟─6bfe2b42-08e8-4556-b245-30df1f019203
+# ╠═92baff16-ab4f-424b-9afd-3fe6813ee8c8
+# ╟─47050662-8397-419b-92bd-36b3e993d5d1
 # ╟─ccff1817-f314-4efb-bb42-671a49c49c36
 # ╠═7184a27f-ec42-47bf-a9bb-1abc78a37ab1
 # ╟─3ad55654-ef28-415f-8c6f-d7c17a5d1399
@@ -207,3 +260,6 @@ myvec[end]
 # ╠═d205f472-c8b2-4c12-b659-f7a2b290c79d
 # ╠═87bef7ee-8525-4b21-af78-11e42aa02498
 # ╠═4296616a-cf13-4497-8359-fa0b723829be
+# ╠═4528b3c2-aacb-4436-aeae-9adc536e6665
+# ╠═14c905f5-4f71-4a9a-9f93-7ed9e4f40585
+# ╠═aa8cdd28-502f-42e6-bc1b-c6259c7efabc
